@@ -7,25 +7,24 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:provider/provider.dart';
 
 import 'package:wisspr_app/main.dart';
-import 'package:wisspr_app/theme/theme_provider.dart';
 
 void main() {
-  testWidgets('App can be created without errors', (WidgetTester tester) async {
-    // This test just verifies that the app can be created without throwing exceptions
-    // It's a basic smoke test to ensure the app structure is valid
-    
-    // Create the app with provider and pump it
-    await tester.pumpWidget(
-      ChangeNotifierProvider(
-        create: (_) => ThemeProvider(),
-        child: const MyApp(),
-      ),
-    );
-    
-    // If we get here without exceptions, the test passes
-    // The test framework will catch any build errors automatically
+  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+    // Build our app and trigger a frame.
+    await tester.pumpWidget(const MyApp());
+
+    // Verify that our counter starts at 0.
+    expect(find.text('0'), findsOneWidget);
+    expect(find.text('1'), findsNothing);
+
+    // Tap the '+' icon and trigger a frame.
+    await tester.tap(find.byIcon(Icons.add));
+    await tester.pump();
+
+    // Verify that our counter has incremented.
+    expect(find.text('0'), findsNothing);
+    expect(find.text('1'), findsOneWidget);
   });
 }
