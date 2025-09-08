@@ -19,7 +19,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
     return PerformanceHelper.optimizeWidget(
       Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(
@@ -29,7 +29,6 @@ class _SignupScreenState extends State<SignupScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // Top section with logo and branding
                 Column(
                   children: [
                     SizedBox(height: responsive.height(60)),
@@ -45,7 +44,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           return Icon(
                             Icons.apps,
                             size: responsive.width(60),
-                            color: Colors.white,
+                            color: Theme.of(context).colorScheme.primary,
                           );
                         },
                       ),
@@ -58,7 +57,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         textStyle: TextStyle(
                           fontSize: responsive.fontSize(32),
                           fontWeight: FontWeight.w400,
-                          color: const Color(0xFFFFD859), // Golden color
+                          color: Theme.of(context).colorScheme.primaryFixed,
                           letterSpacing: 1.2,
                         ),
                       ),
@@ -77,7 +76,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         textStyle: TextStyle(
                           fontSize: responsive.fontSize(24),
                           fontWeight: FontWeight.w400,
-                          color: Colors.white,
+                          color: Theme.of(context).colorScheme.primary,
                           letterSpacing: 0.5,
                         ),
                       ),
@@ -110,8 +109,8 @@ class _SignupScreenState extends State<SignupScreen> {
                       child: ElevatedButton(
                         onPressed: _handleGoogleLogin,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Theme.of(context).colorScheme.surface,// Dark grey
-                          foregroundColor: Colors.white,
+                          backgroundColor: Theme.of(context).colorScheme.surface,
+                          foregroundColor: Theme.of(context).colorScheme.primary,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -150,8 +149,8 @@ class _SignupScreenState extends State<SignupScreen> {
                       child: ElevatedButton(
                         onPressed: _handleAppleLogin,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Theme.of(context).colorScheme.surface, // Dark grey
-                          foregroundColor: Colors.white,
+                          backgroundColor: Theme.of(context).colorScheme.surface,
+                          foregroundColor: Theme.of(context).colorScheme.primary,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -189,7 +188,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       text: TextSpan(
                         style: TextStyle(
                           fontSize: responsive.fontSize(14),
-                          color: Colors.white.withAlpha(156),
+                          color: Theme.of(context).colorScheme.tertiary,
                           fontFamily: FontConstants.satoshi,
                         ),
                         children: [
@@ -197,7 +196,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           TextSpan(
                             text: 'Terms of Service',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: Theme.of(context).colorScheme.primary,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -205,7 +204,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           TextSpan(
                             text: 'Privacy Policy',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: Theme.of(context).colorScheme.primary,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -227,13 +226,13 @@ class _SignupScreenState extends State<SignupScreen> {
     // TODO: Implement Google login
     print('Google login pressed');
     // For now, navigate to main navigation
-    NavigationHelper.goToMainNavigation(context);
+    NavigationHelper.goToHome(context);
   }
 
   void _handleAppleLogin() {
     // TODO: Implement Apple login
     print('Apple login pressed');
     // For now, navigate to main navigation
-    NavigationHelper.goToMainNavigation(context);
+    NavigationHelper.goToHome(context);
   }
 }

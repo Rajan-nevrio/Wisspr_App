@@ -138,7 +138,7 @@ class _SplashScreenState extends State<SplashScreen>
       ),
     );
 
-    // Start animations with staggered timing
+    /// Start animations with staggered timing
     _startStaggeredAnimations();
   }
 
@@ -209,7 +209,7 @@ class _SplashScreenState extends State<SplashScreen>
                                 return Icon(
                                   Icons.apps,
                                   size: responsive.width(60),
-                                  color: Colors.white,
+                                  color: Theme.of(context).colorScheme.primary,
                                 );
                               },
                             ),
@@ -233,7 +233,7 @@ class _SplashScreenState extends State<SplashScreen>
                         style: TextStyle(
                           fontSize: responsive.fontSize(40),
                           fontWeight: FontWeight.bold,
-                          color: Theme.of(context).colorScheme.primaryFixed,
+                          color: Theme.of(context).colorScheme.primary,
                           fontFamily: FontConstants.marcellus,
                           letterSpacing: 1.2,
                         ),
@@ -278,7 +278,7 @@ class _SplashScreenState extends State<SplashScreen>
                         style: TextStyle(
                           fontFamily: FontConstants.satoshi,
                           fontSize: responsive.fontSize(12),
-                          color: Colors.white.withValues(alpha: 0.6),
+                          color: Theme.of(context).colorScheme.tertiary,
                           letterSpacing: 0.5,
                         ),
                       ),

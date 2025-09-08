@@ -21,7 +21,7 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
     IntroSlide(
       title: 'Welcome to Wisspr!',
       description: 'Your Journey to a Fragrant \nHome Begins Here!',
-      icon: "assets/image/Oboarding-1.png",
+      icon: "assets/image/Onboarding-1.png",
       color: const Color(0x00000000),
     ),
     IntroSlide(
@@ -71,15 +71,15 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
         curve: Curves.easeInOut,
       );
     } else {
-      _navigateToHome();
+      _navigateToSignUp();
     }
   }
 
   void _skipIntro() {
-    _navigateToHome();
+    _navigateToSignUp();
   }
 
-  void _navigateToHome() {
+  void _navigateToSignUp() {
     NavigationHelper.goToSignup(context);
   }
 
@@ -89,11 +89,11 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
 
     return PerformanceHelper.optimizeWidget(
       Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: SafeArea(
           child: Column(
             children: [
-              // Skip button (only on first two screens)
+              /// Skip button (only on first, second screens)
               if (_currentPage < _slides.length - 1)
                 Padding(
                   padding: EdgeInsets.only(
@@ -109,7 +109,7 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
                         style: TextStyle(
                           fontFamily: FontConstants.satoshi,
                           fontSize: responsive.fontSize(16),
-                          color: Colors.white,
+                          color: Theme.of(context).colorScheme.primary,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -117,7 +117,7 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
                   ),
                 ),
               
-              // Page view
+              /// Page view
               Expanded(
                 child: PageView.builder(
                   controller: _pageController,
@@ -128,12 +128,12 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
                   },
                   itemCount: _slides.length,
                   itemBuilder: (context, index) {
-                    return _buildSlide(_slides[index], responsive);
+                    return _buildSlide(context, _slides[index], responsive);
                   },
                 ),
               ),
 
-              // Page indicators and navigation
+              /// Page indicators and navigation.
               _buildBottomSection(responsive),
             ],
           ),
@@ -142,23 +142,23 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
     );
   }
 
-  Widget _buildSlide(IntroSlide slide, ResponsiveDimensions responsive) {
+  /// Page UI
+  Widget _buildSlide(BuildContext context, IntroSlide slide, ResponsiveDimensions responsive) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        // Image at the top
-        SizedBox(
+       Container(
           width: double.infinity,
           height: responsive.height(440),
+          color: Theme.of(context).scaffoldBackgroundColor,
           child: Image.asset(
             slide.icon,
-            fit: BoxFit.cover,
+            fit: BoxFit.fitWidth,
           ),
         ),
-
         SizedBox(height: responsive.height(40)),
 
-        // Title
+        /// Title
         TweenAnimationBuilder<double>(
           duration: const Duration(milliseconds: 600),
           tween: Tween(begin: 0.0, end: 1.0),
@@ -173,7 +173,7 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
                     textStyle: TextStyle(
                       fontSize: responsive.fontSize(28),
                       fontWeight: FontWeight.w400,
-                      color: Colors.white,
+                      color: Theme.of(context).colorScheme.primary,
                       letterSpacing: 1.2,
                     ),
                   ),
@@ -183,10 +183,9 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
             );
           },
         ),
-
         SizedBox(height: responsive.height(20)),
 
-        // Description
+        /// Description
         TweenAnimationBuilder<double>(
           duration: const Duration(milliseconds: 800),
           tween: Tween(begin: 0.0, end: 1.0),
@@ -201,7 +200,7 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
                     textStyle: TextStyle(
                       fontSize: responsive.fontSize(16),
                       fontWeight: FontWeight.w400,
-                      color: Colors.white.withAlpha(200),
+                      color: Theme.of(context).colorScheme.tertiary,
                       height: 1.5,
                       letterSpacing: 0.3,
                     ),
@@ -216,6 +215,7 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
     );
   }
 
+  /// Widget to show bottom navigation UI.
   Widget _buildBottomSection(ResponsiveDimensions responsive) {
     return Padding(
       padding: EdgeInsets.symmetric(
@@ -225,7 +225,7 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
       child: Column(
         children: [
 
-          // Continue button (only on last screen)
+          /// Continue button (only on last screen).
           if (_currentPage == _slides.length - 1)
             SizedBox(
               width: double.infinity,
@@ -233,8 +233,8 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
               child: ElevatedButton(
                 onPressed: _nextPage,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  foregroundColor: Colors.black,
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  foregroundColor: Theme.of(context).scaffoldBackgroundColor,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(28),
                   ),
@@ -254,7 +254,7 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
 
           SizedBox(height: responsive.height(40)),
 
-          // Page indicators
+          /// Page indicators.
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: List.generate(
@@ -267,6 +267,7 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
     );
   }
 
+  /// Widgets used to show the indicator UI.
   Widget _buildPageIndicator(int index, ResponsiveDimensions responsive) {
     final isActive = index == _currentPage;
     
@@ -275,7 +276,7 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
       width: responsive.width(24),
       height: responsive.height(5),
       decoration: BoxDecoration(
-        color: isActive ? Colors.white : Colors.white.withAlpha(84),
+        color: isActive ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.tertiary,
         shape: BoxShape.rectangle,
         borderRadius: BorderRadius.circular(30),
       ),
@@ -283,6 +284,7 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
   }
 }
 
+/// Model to pass UI data.
 class IntroSlide {
   final String title;
   final String description;

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../screens/splash_screen.dart';
 import '../screens/intro_screen.dart';
 import '../screens/signup_screen.dart';
-import '../screens/main_navigation_screen.dart';
+import '../screens/home_screen.dart';
 
 /// Centralized route management class for the entire app
 class AppRoutes {
@@ -18,7 +18,6 @@ class AppRoutes {
   static const String intro = '/intro';
   static const String signup = '/signup';
   static const String home = '/home';
-  static const String mainNavigation = '/main-navigation';
   static const String responsive = '/responsive';
   static const String sharedPreferences = '/sharedprefs';
   static const String routeExample = '/route-example';
@@ -84,8 +83,7 @@ class AppRoutes {
     // Main app routes
     splash: (context) => const SplashScreen(),
     intro: (context) => const IntroScreen(),
-    home: (context) => const MainNavigationScreen(),
-    mainNavigation: (context) => const MainNavigationScreen(),
+    home: (context) => const HomeScreen(),
     responsive: (context) => const _PlaceholderScreen(title: 'Responsive Demo'),
     sharedPreferences: (context) => const _PlaceholderScreen(title: 'Data Storage'),
     routeExample: (context) => const _PlaceholderScreen(title: 'Route Examples'),
@@ -170,13 +168,7 @@ class AppRoutes {
       
       case home:
         return MaterialPageRoute(
-          builder: (context) => const MainNavigationScreen(),
-          settings: settings,
-        );
-      
-      case mainNavigation:
-        return MaterialPageRoute(
-          builder: (context) => const MainNavigationScreen(),
+          builder: (context) => const HomeScreen(),
           settings: settings,
         );
       
@@ -357,7 +349,6 @@ class AppRoutes {
     splash,
     intro,
     home,
-    mainNavigation,
     responsive,
     sharedPreferences,
     routeExample,

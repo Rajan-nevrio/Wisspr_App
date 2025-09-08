@@ -15,11 +15,6 @@ class NavigationHelper {
     return AppRoutes.pushReplacement<T, dynamic>(context, AppRoutes.home);
   }
 
-  /// Navigate to main navigation screen
-  static Future<T?> goToMainNavigation<T extends Object?>(BuildContext context) {
-    return AppRoutes.push<T>(context, AppRoutes.mainNavigation);
-  }
-
   /// Navigate to splash screen
   static Future<T?> goToSplash<T extends Object?>(BuildContext context) {
     return AppRoutes.pushAndClearStack<T>(context, AppRoutes.splash);
