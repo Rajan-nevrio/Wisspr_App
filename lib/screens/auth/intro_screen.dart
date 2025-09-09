@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wisspr_app/theme/font_constants.dart';
-import '../utils/responsive_dimensions.dart';
-import '../utils/performance_helper.dart';
-import '../routes/navigation_helper.dart';
+import '../../utils/responsive_dimensions.dart';
+import '../../utils/performance_helper.dart';
+import '../../routes/navigation_helper.dart';
 
 class IntroScreen extends StatefulWidget {
   const IntroScreen({super.key});

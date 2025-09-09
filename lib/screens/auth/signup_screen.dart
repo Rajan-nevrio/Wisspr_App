@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../theme/font_constants.dart';
-import '../utils/responsive_dimensions.dart';
-import '../utils/performance_helper.dart';
-import '../routes/navigation_helper.dart';
+import '../../theme/font_constants.dart';
+import '../../utils/responsive_dimensions.dart';
+import '../../utils/performance_helper.dart';
+import '../../routes/navigation_helper.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});

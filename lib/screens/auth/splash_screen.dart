@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:wisspr_app/theme/font_constants.dart';
-import '../utils/responsive_dimensions.dart';
-import '../utils/performance_helper.dart';
-import '../routes/navigation_helper.dart';
+import '../../utils/responsive_dimensions.dart';
+import '../../utils/performance_helper.dart';
+import '../../routes/navigation_helper.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

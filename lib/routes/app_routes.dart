@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../screens/splash_screen.dart';
-import '../screens/intro_screen.dart';
-import '../screens/signup_screen.dart';
-import '../screens/home_screen.dart';
+import '../screens/auth/splash_screen.dart';
+import '../screens/auth/intro_screen.dart';
+import '../screens/auth/signup_screen.dart';
+import '../screens/dashboard/dashboard_screen.dart';
 
 /// Centralized route management class for the entire app
 class AppRoutes {
@@ -83,7 +83,7 @@ class AppRoutes {
     // Main app routes
     splash: (context) => const SplashScreen(),
     intro: (context) => const IntroScreen(),
-    home: (context) => const HomeScreen(),
+    home: (context) => const BottomNavigationScreen(),
     responsive: (context) => const _PlaceholderScreen(title: 'Responsive Demo'),
     sharedPreferences: (context) => const _PlaceholderScreen(title: 'Data Storage'),
     routeExample: (context) => const _PlaceholderScreen(title: 'Route Examples'),
@@ -168,7 +168,7 @@ class AppRoutes {
       
       case home:
         return MaterialPageRoute(
-          builder: (context) => const HomeScreen(),
+          builder: (context) => const BottomNavigationScreen(),
           settings: settings,
         );
       
