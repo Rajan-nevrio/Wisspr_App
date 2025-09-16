@@ -44,7 +44,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: _buildBody(),
+      body: SafeArea(child: _buildBody()),
       extendBody: true,
       bottomNavigationBar: _buildCustomCrystalNavigationBar(),
     );

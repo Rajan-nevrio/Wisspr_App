@@ -234,7 +234,7 @@ class _SplashScreenState extends State<SplashScreen>
                           fontSize: responsive.fontSize(40),
                           fontWeight: FontWeight.bold,
                           color: Theme.of(context).colorScheme.primary,
-                          fontFamily: FontConstants.marcellus,
+                         // fontFamily: FontConstants.marcellus,
                           letterSpacing: 1.2,
                         ),
                         textAlign: TextAlign.center,
@@ -257,7 +257,7 @@ class _SplashScreenState extends State<SplashScreen>
                           fontSize: responsive.fontSize(16),
                           color: Theme.of(context).colorScheme.tertiary,
                           letterSpacing: 0.5,
-                          fontFamily: FontConstants.satoshi,
+                         // fontFamily: FontConstants.satoshi,
                         ),
                         textAlign: TextAlign.center,
                       ),
@@ -276,7 +276,7 @@ class _SplashScreenState extends State<SplashScreen>
                       child: Text(
                         'Version 1.0',
                         style: TextStyle(
-                          fontFamily: FontConstants.satoshi,
+                         //fontFamily: FontConstants.satoshi,
                           fontSize: responsive.fontSize(12),
                           color: Theme.of(context).colorScheme.tertiary,
                           letterSpacing: 0.5,

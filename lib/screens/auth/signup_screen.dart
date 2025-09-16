@@ -129,7 +129,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             Text(
                               'Login with Google',
                               style: TextStyle(
-                                fontFamily: FontConstants.satoshi,
+                                //fontFamily: FontConstants.satoshi,
                                 fontSize: responsive.fontSize(16),
                                 fontWeight: FontWeight.w500,
                                 color: Theme.of(context).colorScheme.onSecondary,
@@ -169,7 +169,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             Text(
                               'Login with Apple',
                               style: TextStyle(
-                                fontFamily: FontConstants.satoshi,
+                               // fontFamily: FontConstants.satoshi,
                                 fontSize: responsive.fontSize(16),
                                 fontWeight: FontWeight.w500,
                                 color: Theme.of(context).colorScheme.onSecondary,
@@ -189,7 +189,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         style: TextStyle(
                           fontSize: responsive.fontSize(14),
                           color: Theme.of(context).colorScheme.tertiary,
-                          fontFamily: FontConstants.satoshi,
+                          //fontFamily: FontConstants.satoshi,
                         ),
                         children: [
                           const TextSpan(text: 'By continuing, you agree to our '),

@@ -107,7 +107,7 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
                       child: Text(
                         'Skip',
                         style: TextStyle(
-                          fontFamily: FontConstants.satoshi,
+                          //fontFamily: FontConstants.satoshi,
                           fontSize: responsive.fontSize(16),
                           color: Theme.of(context).colorScheme.primary,
                           fontWeight: FontWeight.w500,
@@ -243,7 +243,7 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
                 child: Text(
                   'Continue',
                   style: TextStyle(
-                    fontFamily: FontConstants.satoshi,
+                    //fontFamily: FontConstants.satoshi,
                     fontSize: responsive.fontSize(16),
                     fontWeight: FontWeight.w600,
                     letterSpacing: 0.5,

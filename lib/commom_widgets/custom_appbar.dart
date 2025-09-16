@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:wisspr_app/theme/font_constants.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final BuildContext context;
@@ -49,7 +48,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w500,
-                  fontFamily: FontConstants.marcellus,
                   color: Theme.of(context).colorScheme.primary,
                 ),
               ),

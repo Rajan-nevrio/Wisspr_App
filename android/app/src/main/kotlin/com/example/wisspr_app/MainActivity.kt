@@ -1,4 +1,4 @@
-package com.example.wisspr_app
+package com.nevrio.wisspr.demo
 
 import io.flutter.embedding.android.FlutterActivity
 
