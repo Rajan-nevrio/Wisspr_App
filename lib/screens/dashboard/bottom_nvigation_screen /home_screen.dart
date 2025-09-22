@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../commom_widgets/custom_appbar.dart';
-import '../../theme/font_constants.dart';
-import '../../utils/responsive_dimensions.dart';
+import '../../../commom_widgets/custom_appbar.dart';
+import '../../../theme/font_constants.dart';
+import '../../../utils/responsive_dimensions.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -118,61 +118,60 @@ class _HomeScreenState extends State<HomeScreen> {
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.only(left: 20),
       child: Row(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
+          Stack(
             children: [
-              SizedBox(height: _responsive.height(100)),
-              Text(
-                'Regel',
-                style: TextStyle(
-                  fontSize: _responsive.fontSize(40),
-                  fontWeight: FontWeight.w400,
-                  color: Theme.of(context).colorScheme.primary,
-                  letterSpacing: 1.2,
-                 // fontFamily: FontConstants.marcellus,
+              SizedBox(
+                height: _responsive.height(500),
+                width: MediaQuery.of(context).size.width - 20,
+                child: Image.asset(
+                  "assets/image/HP_image.png",
+                  fit: BoxFit.fitHeight,
                 ),
               ),
-              Text(
-                'Elixir',
-                style: TextStyle(
-                  fontSize: _responsive.fontSize(28),
-                  fontWeight: FontWeight.w300,
-                  color: Theme.of(context).colorScheme.primary,
-                  letterSpacing: 1.0,
-                  //fontFamily: FontConstants.marcellus,
-                ),
-              ),
-              const SizedBox(height: 12),
-              Text(
-                'A majestic blend of luxury\nand power, fit for royalty.',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: _responsive.fontSize(12),
-                  color: Theme.of(context).colorScheme.tertiary,
-                  height: 1.4,
-                  //fontFamily: FontConstants.satoshi,
+              Positioned(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(height: _responsive.height(100)),
+                    Text(
+                      'Regel',
+                      style: TextStyle(
+                        fontSize: _responsive.fontSize(40),
+                        fontWeight: FontWeight.w400,
+                        color: Theme.of(context).colorScheme.primary,
+                        letterSpacing: 1.2,
+                        // fontFamily: FontConstants.marcellus,
+                      ),
+                    ),
+                    Text(
+                      'Elixir',
+                      style: TextStyle(
+                        fontSize: _responsive.fontSize(28),
+                        fontWeight: FontWeight.w300,
+                        color: Theme.of(context).colorScheme.primary,
+                        letterSpacing: 1.0,
+                        //fontFamily: FontConstants.marcellus,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      'A majestic blend of luxury\nand power, fit for royalty.',
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        fontSize: _responsive.fontSize(12),
+                        color: Theme.of(context).colorScheme.tertiary,
+                        height: 1.4,
+                        //fontFamily: FontConstants.satoshi,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
-          ),
-          SizedBox(width: _responsive.width(30)),
-          SizedBox(
-            height: 450,
-            child: Transform.rotate(
-              angle: 5.8,
-              child: SizedBox(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Image.asset(
-                    'assets/image/main_img.png',
-                    fit: BoxFit.fitHeight,
-                  ),
-                ),
-              ),
-            ),
           ),
         ],
       ),

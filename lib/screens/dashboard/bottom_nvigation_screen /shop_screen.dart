@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../commom_widgets/custom_appbar.dart';
-import '../../theme/font_constants.dart';
-import '../../utils/responsive_dimensions.dart';
+import '../../../commom_widgets/custom_appbar.dart';
+import '../../../theme/font_constants.dart';
+import '../../../utils/responsive_dimensions.dart';
 
 class ShopScreen extends StatefulWidget {
   const ShopScreen({super.key});
@@ -57,11 +57,8 @@ class _ShopScreenState extends State<ShopScreen> {
 
   /// Widget used to show product section.
   Widget _buildProductSection() {
-    return Container(
+    return SizedBox(
       width: double.infinity,
-      decoration: BoxDecoration(
-        color: Theme.of(context).scaffoldBackgroundColor,
-      ),
       child: Stack(
         children: [
           PageView.builder(
@@ -109,25 +106,17 @@ class _ShopScreenState extends State<ShopScreen> {
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.only(left: 20),
       child: Row(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Stack(
             children: [
-              Container(
-                height: 450,
-                width: MediaQuery.of(context).size.width,
-                color: Colors.red,
-                child: Transform.rotate(
-                  angle: 5.8,
-                  child: SizedBox(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.asset(
-                        'assets/image/PFimg.png',
-                        fit: BoxFit.fitHeight,
-                      ),
-                    ),
-                  ),
+              SizedBox(
+                height: _responsive.height(500),
+                width: MediaQuery.of(context).size.width - 20,
+                child: Image.asset(
+                  "assets/image/HP_image.png",
+                  fit: BoxFit.fitHeight,
                 ),
               ),
               Positioned(
@@ -172,7 +161,6 @@ class _ShopScreenState extends State<ShopScreen> {
               ),
             ],
           ),
-          SizedBox(width: _responsive.width(30)),
         ],
       ),
     );

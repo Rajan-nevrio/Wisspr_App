@@ -1,10 +1,10 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:wisspr_app/screens/dashboard/my_device_screen.dart';
-import 'package:wisspr_app/screens/dashboard/profile_screen.dart';
-import 'package:wisspr_app/screens/dashboard/shop_screen.dart';
+import 'package:wisspr_app/screens/dashboard/bottom_nvigation_screen%20/my_device_screen.dart';
+import 'package:wisspr_app/screens/dashboard/bottom_nvigation_screen%20/profile_screen.dart';
+import 'package:wisspr_app/screens/dashboard/bottom_nvigation_screen%20/shop_screen.dart';
 import '../../utils/responsive_dimensions.dart';
-import 'home_screen.dart';
+import 'bottom_nvigation_screen /home_screen.dart';
 
 enum _SelectedTab { home, devices, shop, profile }
 
@@ -44,7 +44,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: SafeArea(child: _buildBody()),
+      body: _buildBody(),
       extendBody: true,
       bottomNavigationBar: _buildCustomCrystalNavigationBar(),
     );

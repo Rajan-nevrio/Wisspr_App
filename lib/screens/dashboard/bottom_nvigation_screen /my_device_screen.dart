@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../commom_widgets/custom_appbar.dart';
-import '../../theme/font_constants.dart';
-import '../../utils/responsive_dimensions.dart';
+import '../../../commom_widgets/custom_appbar.dart';
+import '../../../theme/font_constants.dart';
+import '../../../utils/responsive_dimensions.dart';
 
 class MyDeviceScreen extends StatefulWidget {
   const MyDeviceScreen({super.key});
