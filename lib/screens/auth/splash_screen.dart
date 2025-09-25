@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:wisspr_app/theme/font_constants.dart';
+import 'package:provider/provider.dart';
+import 'package:wisspr_app/main.dart';
+import 'package:wisspr_app/resources/app_strings.dart';
+import 'package:wisspr_app/resources/dimension_spacing/vertical_spacing.dart';
+import '../../commom_widgets/customer_text/marcellus_font_type_text.dart';
+import '../../commom_widgets/customer_text/rougr_script_font_type_text.dart';
+import '../../commom_widgets/customer_text/satoshi_font_type_text.dart';
+import '../../resources/image_path.dart';
 import '../../utils/responsive_dimensions.dart';
 import '../../utils/performance_helper.dart';
+import '../../providers/auth/splash_provider.dart';
 import '../../routes/navigation_helper.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -11,167 +19,30 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>
-    with TickerProviderStateMixin {
-  late AnimationController _logoAnimationController;
-  late AnimationController _titleAnimationController;
-  late AnimationController _taglineAnimationController;
-  late AnimationController _versionAnimationController;
-  
-  late Animation<double> _logoFadeAnimation;
-  late Animation<double> _logoScaleAnimation;
-  late Animation<Offset> _logoSlideAnimation;
-  
-  late Animation<double> _titleFadeAnimation;
-  late Animation<Offset> _titleSlideAnimation;
-  
-  late Animation<double> _taglineFadeAnimation;
-  late Animation<Offset> _taglineSlideAnimation;
-  
-  late Animation<double> _versionFadeAnimation;
-  late Animation<Offset> _versionSlideAnimation;
+class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMixin {
+  late SplashProvider _splashProvider;
 
   @override
   void initState() {
     super.initState();
-    _setupAnimations();
-    _navigateToIntro();
+    _splashProvider = Provider.of<SplashProvider>(context, listen: false);
+    _splashProvider.initializeAnimations(this);
+    _splashProvider.addListener(_onNavigationStateChanged);
   }
 
-  void _setupAnimations() {
-    // Logo animations
-    _logoAnimationController = AnimationController(
-      duration: const Duration(milliseconds: 1200),
-      vsync: this,
-    );
-
-    _logoFadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _logoAnimationController,
-        curve: Curves.easeInOut,
-      ),
-    );
-
-    _logoScaleAnimation = Tween<double>(begin: 0.5, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _logoAnimationController,
-        curve: Curves.elasticOut,
-      ),
-    );
-
-    _logoSlideAnimation = Tween<Offset>(
-      begin: const Offset(0, -0.5),
-      end: Offset.zero,
-    ).animate(
-      CurvedAnimation(
-        parent: _logoAnimationController,
-        curve: Curves.easeOutCubic,
-      ),
-    );
-
-    // Title animations
-    _titleAnimationController = AnimationController(
-      duration: const Duration(milliseconds: 800),
-      vsync: this,
-    );
-
-    _titleFadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _titleAnimationController,
-        curve: Curves.easeInOut,
-      ),
-    );
-
-    _titleSlideAnimation = Tween<Offset>(
-      begin: const Offset(-0.3, 0),
-      end: Offset.zero,
-    ).animate(
-      CurvedAnimation(
-        parent: _titleAnimationController,
-        curve: Curves.easeOutCubic,
-      ),
-    );
-
-    // Tagline animations
-    _taglineAnimationController = AnimationController(
-      duration: const Duration(milliseconds: 800),
-      vsync: this,
-    );
-
-    _taglineFadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _taglineAnimationController,
-        curve: Curves.easeInOut,
-      ),
-    );
-
-    _taglineSlideAnimation = Tween<Offset>(
-      begin: const Offset(0.3, 0),
-      end: Offset.zero,
-    ).animate(
-      CurvedAnimation(
-        parent: _taglineAnimationController,
-        curve: Curves.easeOutCubic,
-      ),
-    );
-
-    // Version animations
-    _versionAnimationController = AnimationController(
-      duration: const Duration(milliseconds: 600),
-      vsync: this,
-    );
-
-    _versionFadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _versionAnimationController,
-        curve: Curves.easeInOut,
-      ),
-    );
-
-    _versionSlideAnimation = Tween<Offset>(
-      begin: const Offset(0, 0.5),
-      end: Offset.zero,
-    ).animate(
-      CurvedAnimation(
-        parent: _versionAnimationController,
-        curve: Curves.easeOutCubic,
-      ),
-    );
-
-    /// Start animations with staggered timing
-    _startStaggeredAnimations();
-  }
-
-  void _startStaggeredAnimations() {
-    _logoAnimationController.forward();
-    
-    Future.delayed(const Duration(milliseconds: 300), () {
-      if (mounted) _titleAnimationController.forward();
-    });
-    
-    Future.delayed(const Duration(milliseconds: 600), () {
-      if (mounted) _taglineAnimationController.forward();
-    });
-    
-    Future.delayed(const Duration(milliseconds: 900), () {
-      if (mounted) _versionAnimationController.forward();
-    });
-  }
-
-  void _navigateToIntro() {
-    Future.delayed(const Duration(seconds: 4), () {
-      if (mounted) {
+  void _onNavigationStateChanged() {
+    if (_splashProvider.isNavigating && mounted) {
+      if (_splashProvider.navigationDestination == 'home') {
+        NavigationHelper.goToHome(context);
+      } else {
         NavigationHelper.goToIntro(context);
       }
-    });
+    }
   }
 
   @override
   void dispose() {
-    _logoAnimationController.dispose();
-    _titleAnimationController.dispose();
-    _taglineAnimationController.dispose();
-    _versionAnimationController.dispose();
+    _splashProvider.removeListener(_onNavigationStateChanged);
     super.dispose();
   }
 
@@ -188,99 +59,116 @@ class _SplashScreenState extends State<SplashScreen>
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              responsive.sizedBox(height: 200),
-              Center(
-                child: AnimatedBuilder(
-                  animation: _logoAnimationController,
-                  builder: (context, child) {
-                    return FadeTransition(
-                      opacity: _logoFadeAnimation,
-                      child: SlideTransition(
-                        position: _logoSlideAnimation,
-                        child: ScaleTransition(
-                          scale: _logoScaleAnimation,
-                          child: SizedBox(
-                            width: responsive.width(120),
-                            height: responsive.width(210),
-                            child: Image.asset(
-                              'assets/logo/app_logo.png',
-                              fit: BoxFit.contain,
-                              errorBuilder: (context, error, stackTrace) {
-                                return Icon(
-                                  Icons.apps,
-                                  size: responsive.width(60),
-                                  color: Theme.of(context).colorScheme.primary,
-                                );
-                              },
-                            ),
+              VerticalSpacing(height: 200),
+              
+              /// Logo with Selector - only rebuilds when logo visibility changes
+              Selector<SplashProvider, bool>(
+                selector: (context, provider) => provider.isLogoVisible,
+                builder: (context, isLogoVisible, child) {
+                  return Center(
+                    child: AnimatedOpacity(
+                      opacity: isLogoVisible ? 1.0 : 0.0,
+                      duration: const Duration(milliseconds: 1200),
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 1200),
+                        curve: Curves.elasticOut,
+                        transform: Matrix4.identity()
+                          ..scale(isLogoVisible ? 1.0 : 0.5)
+                          ..translate(0.0, isLogoVisible ? 0.0 : -50.0),
+                        child: SizedBox(
+                          width: responsive.width(120),
+                          height: responsive.width(210),
+                          child: Image.asset(
+                            ImgPath.appLogo,
+                            fit: BoxFit.contain,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Icon(
+                                Icons.apps,
+                                size: responsive.width(60),
+                                color: Theme.of(context).colorScheme.primary,
+                              );
+                            },
                           ),
                         ),
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  );
+                },
               ),
-              responsive.sizedBox(height: 8),
-              AnimatedBuilder(
-                animation: _titleAnimationController,
-                builder: (context, child) {
-                  return FadeTransition(
-                    opacity: _titleFadeAnimation,
-                    child: SlideTransition(
-                      position: _titleSlideAnimation,
-                      child: Text(
-                        'Wisspr',
-                        style: TextStyle(
-                          fontSize: responsive.fontSize(40),
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).colorScheme.primary,
-                         // fontFamily: FontConstants.marcellus,
-                          letterSpacing: 1.2,
-                        ),
+              
+              VerticalSpacing(height: 4),
+              
+              /// Title with Selector - only rebuilds when title visibility changes
+              Selector<SplashProvider, bool>(
+                selector: (context, provider) => provider.isTitleVisible,
+                builder: (context, isTitleVisible, child) {
+                  return AnimatedOpacity(
+                    opacity: isTitleVisible ? 1.0 : 0.0,
+                    duration: const Duration(milliseconds: 800),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 800),
+                      curve: Curves.easeOutCubic,
+                      transform: Matrix4.identity()
+                        ..translate(isTitleVisible ? 0.0 : -30.0, 0.0),
+                      child: MText(
+                        msg: AppStrings.appName,
+                        textSize: responsive.fontSize(40),
+                        textWeight: FontWeight.bold,
+                        textColor: Theme.of(context).colorScheme.primaryFixed,
+                        letterSpacing: 1.2,
                         textAlign: TextAlign.center,
                       ),
                     ),
                   );
                 },
               ),
-              responsive.sizedBox(height: 16),
-              AnimatedBuilder(
-                animation: _taglineAnimationController,
-                builder: (context, child) {
-                  return FadeTransition(
-                    opacity: _taglineFadeAnimation,
-                    child: SlideTransition(
-                      position: _taglineSlideAnimation,
-                      child: Text(
-                        "Hygiene's best kept secret…shh!",
-                        style: TextStyle(
-                          fontSize: responsive.fontSize(16),
-                          color: Theme.of(context).colorScheme.tertiary,
-                          letterSpacing: 0.5,
-                         // fontFamily: FontConstants.satoshi,
-                        ),
+              
+              VerticalSpacing(height: 16),
+              
+              /// Tagline with Selector - only rebuilds when tagline visibility changes
+              Selector<SplashProvider, bool>(
+                selector: (context, provider) => provider.isTaglineVisible,
+                builder: (context, isTaglineVisible, child) {
+                  return AnimatedOpacity(
+                    opacity: isTaglineVisible ? 1.0 : 0.0,
+                    duration: const Duration(milliseconds: 800),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 800),
+                      curve: Curves.easeOutCubic,
+                      transform: Matrix4.identity()
+                        ..translate(isTaglineVisible ? 0.0 : 30.0, 0.0),
+                      child: RText(
+                        msg: AppStrings.splashDescription,
+                        textSize: responsive.fontSize(20),
+                        textColor: Theme.of(context).colorScheme.tertiary,
+                        letterSpacing: 0.5,
                         textAlign: TextAlign.center,
                       ),
                     ),
                   );
                 },
               ),
+              
               Spacer(),
-              AnimatedBuilder(
-                animation: _versionAnimationController,
-                builder: (context, child) {
-                  return FadeTransition(
-                    opacity: _versionFadeAnimation,
-                    child: SlideTransition(
-                      position: _versionSlideAnimation,
-                      child: Text(
-                        'Version 1.0',
-                        style: TextStyle(
-                         //fontFamily: FontConstants.satoshi,
-                          fontSize: responsive.fontSize(12),
-                          color: Theme.of(context).colorScheme.tertiary,
-                          letterSpacing: 0.5,
-                        ),
+              
+              /// Version with Selector - only rebuilds when version visibility changes
+              Selector<SplashProvider, bool>(
+                selector: (context, provider) => provider.isVersionVisible,
+                builder: (context, isVersionVisible, child) {
+                  return AnimatedOpacity(
+                    opacity: isVersionVisible ? 1.0 : 0.0,
+                    duration: const Duration(milliseconds: 600),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 600),
+                      curve: Curves.easeOutCubic,
+                      transform: Matrix4.identity()
+                        ..translate(0.0, isVersionVisible ? 0.0 : 50.0),
+                      child: SText(
+                        msg: appVersion,
+                        textSize: responsive.fontSize(14),
+                        textColor: Theme.of(context).colorScheme.tertiary,
+                        textWeight: FontWeight.w200,
+                        letterSpacing: 0.5,
                       ),
                     ),
                   );

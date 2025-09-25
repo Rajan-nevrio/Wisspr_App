@@ -38,6 +38,7 @@ dependencies:
   google_fonts: ^6.3.1
   http: ^1.1.0
   crystal_navigation_bar: ^1.0.4
+  provider: ^6.1.1
 
 dev_dependencies:
   flutter_test:
@@ -66,6 +67,9 @@ flutter:
     - assets/logo/
     - assets/image/
     - assets/image/profile_screen_icon/
+    - assets/image/authentication_screens_images/
+    - assets/image/common_images/
+    - assets/image/Navigation_bottom_bar_icons/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
@@ -78,7 +82,23 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
+  fonts:
+    - family: Marcellus
+      fonts:
+        - asset: assets/fonts/Marcellus-Regular.ttf
 
-  #
+    - family: Satoshi
+      fonts:
+        - asset: assets/fonts/Satoshi-Regular.otf
+          weight: 400
+        - asset: assets/fonts/Satoshi-Light.otf
+          weight: 200
+        - asset: assets/fonts/Satoshi-Medium.otf
+          weight: 600
+
+    - family: RougeScript
+      fonts:
+        - asset: assets/fonts/RougeScript-Regular.ttf
+
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package

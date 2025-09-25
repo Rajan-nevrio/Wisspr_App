@@ -1,4 +1,16 @@
 class ImgPath{
+  /// Authentication Screen images path.
+  static String appLogo = "assets/logo/app_logo.png";
+  static String onBoarding1 = "assets/image/authentication_screens_images/Onboarding-1.png";
+  static String onBoarding2 = "assets/image/authentication_screens_images/Onboarding-2.png";
+  static String onBoarding3 = "assets/image/authentication_screens_images/Onboarding-3.png";
+  static String googleIcon = "assets/image/authentication_screens_images/google_icon.png";
+
+  /// Navigation bottom bar icons.
+  static String homeIcon = "assets/image/Navigation_bottom_bar_icons/home.png";
+  static String deviceIcon = "assets/image/Navigation_bottom_bar_icons/device.png";
+  static String shopIcon = "assets/image/Navigation_bottom_bar_icons/shop.png";
+  static String profileIcon = "assets/image/Navigation_bottom_bar_icons/profile.png";
 
   /// Dashboard > Profile Screen images path.
   static String myAccount = "assets/image/profile_screen_icon/my_account.png";
@@ -8,4 +20,13 @@ class ImgPath{
   static String notificationSetting = "assets/image/profile_screen_icon/notification_setting.png";
   static String logout = "assets/image/profile_screen_icon/logout.png";
   static String deleteAccount = "assets/image/profile_screen_icon/delete_account.png";
+
+  /// Common images path.
+  static String current = "assets/image/common_images/current.png";
+  static String drop = "assets/image/common_images/drop.png";
+  static String hpImage = "assets/image/common_images/HP_image.png";
+  static String lowBattery = "assets/image/common_images/Low Battery.png";
+  static String fragranceDeviceImg = "assets/image/air fragrance device in a room.png";
+  static String perfumeFlowerImg = "assets/image/perfume_flower.jpg";
+  static String bagImg = "assets/image/common_images/bag.png";
 }

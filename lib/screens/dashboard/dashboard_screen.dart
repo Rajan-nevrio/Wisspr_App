@@ -1,12 +1,17 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:wisspr_app/screens/dashboard/bottom_nvigation_screen%20/my_device_screen.dart';
-import 'package:wisspr_app/screens/dashboard/bottom_nvigation_screen%20/profile_screen.dart';
-import 'package:wisspr_app/screens/dashboard/bottom_nvigation_screen%20/shop_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:wisspr_app/commom_widgets/customer_text/satoshi_font_type_text.dart';
+import 'package:wisspr_app/providers/dashboard/dashboard_provider.dart';
+import 'package:wisspr_app/resources/dimension_spacing/horizontal_spacing.dart';
+import '../../resources/app_strings.dart';
+import '../../resources/image_path.dart';
 import '../../utils/responsive_dimensions.dart';
-import 'bottom_nvigation_screen /home_screen.dart';
+import 'bottom_navigation_screen/home_screen.dart';
+import 'bottom_navigation_screen/my_device_screen.dart';
+import 'bottom_navigation_screen/profile_screen.dart';
+import 'bottom_navigation_screen/shop_screen.dart';
 
-enum _SelectedTab { home, devices, shop, profile }
 
 class BottomNavigationScreen extends StatefulWidget {
   const BottomNavigationScreen({super.key});
@@ -16,52 +21,45 @@ class BottomNavigationScreen extends StatefulWidget {
 }
 
 class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
-  late ResponsiveDimensions _responsive;
+  late ResponsiveDimensions r;
+  
+  // Cache screen instances for better performance
+  late final List<Widget> _screens;
 
   @override
   void initState() {
     super.initState();
-    _responsive = ResponsiveDimensions();
+    r = ResponsiveDimensions();
+    
+    // Initialize all screens once for caching
+    _screens = [
+      const HomeScreen(),
+      const MyDeviceScreen(),
+      const ShopScreen(),
+      const ProfileScreen(),
+    ];
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _responsive.init(context);
-  }
-
-  /// Default selected tab.
-  var _selectedTab = _SelectedTab.home;
-
-  /// Method used to handle navigation index changes.
-  void _handleIndexChanged(int i) {
-    setState(() {
-      _selectedTab = _SelectedTab.values[i];
-    });
+    r.init(context);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: _buildBody(),
+      body: Selector<DashBoardProvider, int>(
+        selector: (context, provider) => provider.selectedTab.index,
+        builder: (context, selectedIndex, _) => IndexedStack(
+          index: selectedIndex,
+          children: _screens,
+        ),
+      ),
       extendBody: true,
       bottomNavigationBar: _buildCustomCrystalNavigationBar(),
     );
-  }
-
-  /// Main body.
-  Widget _buildBody() {
-    switch (_selectedTab) {
-      case _SelectedTab.home:
-        return HomeScreen();
-      case _SelectedTab.devices:
-        return MyDeviceScreen();
-      case _SelectedTab.shop:
-        return ShopScreen();
-      case _SelectedTab.profile:
-        return ProfileScreen();
-    }
   }
 
   /// Widget used to show navigation bar design.
@@ -88,34 +86,39 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
               ),
             ],
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _buildNavItem(
-                imgPath: "assets/image/home.png",
-                label: 'Home',
-                isSelected: _selectedTab == _SelectedTab.home,
-                onTap: () => _handleIndexChanged(0),
-              ),
-              _buildNavItem(
-                imgPath: "assets/image/device.png",
-                label: 'Devices',
-                isSelected: _selectedTab == _SelectedTab.devices,
-                onTap: () => _handleIndexChanged(1),
-              ),
-              _buildNavItem(
-                imgPath: "assets/image/shop.png",
-                label: 'Shop',
-                isSelected: _selectedTab == _SelectedTab.shop,
-                onTap: () => _handleIndexChanged(2),
-              ),
-              _buildNavItem(
-                imgPath: "assets/image/profile.png",
-                label: 'Profile',
-                isSelected: _selectedTab == _SelectedTab.profile,
-                onTap: () => _handleIndexChanged(3),
-              ),
-            ],
+          child: Selector<DashBoardProvider, int>(
+            selector: (context, provider) => provider.selectedTab.index,
+            builder: (context, selectedIndex, child) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  _buildNavItem(
+                    imgPath: ImgPath.homeIcon,
+                    label: AppStrings.home,
+                    isSelected: selectedIndex == 0,
+                    onTap: () => context.read<DashBoardProvider>().handleIndexChanged(0),
+                  ),
+                  _buildNavItem(
+                    imgPath: ImgPath.deviceIcon,
+                    label: AppStrings.devices,
+                    isSelected: selectedIndex == 1,
+                    onTap: () => context.read<DashBoardProvider>().handleIndexChanged(1),
+                  ),
+                  _buildNavItem(
+                    imgPath: ImgPath.shopIcon,
+                    label: AppStrings.shop,
+                    isSelected: selectedIndex == 2,
+                    onTap: () => context.read<DashBoardProvider>().handleIndexChanged(2),
+                  ),
+                  _buildNavItem(
+                    imgPath: ImgPath.profileIcon,
+                    label: AppStrings.profile,
+                    isSelected: selectedIndex == 3,
+                    onTap: () => context.read<DashBoardProvider>().handleIndexChanged(3),
+                  ),
+                ],
+              );
+            },
           ),
         ),
       ),
@@ -132,7 +135,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: EdgeInsets.symmetric(horizontal: r.width(16), vertical: r.height(8)),
         decoration: BoxDecoration(
           color: isSelected
               ? Theme.of(context).colorScheme.primary
@@ -144,22 +147,20 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
           children: [
             Image.asset(
               imgPath,
-              height: 20,
-              width: 20,
+              height: r.height(20),
+              width: r.height(20),
               fit: BoxFit.contain,
               color: isSelected
                   ? Theme.of(context).scaffoldBackgroundColor
                   : Theme.of(context).colorScheme.tertiary,
             ),
             if (isSelected) ...[
-              const SizedBox(width: 8),
-              Text(
-                label,
-                style: TextStyle(
-                  color: Theme.of(context).scaffoldBackgroundColor,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
+              HorizontalSpacing(width: 8),
+              SText(
+                msg: label,
+                textColor: Theme.of(context).scaffoldBackgroundColor,
+                textSize: r.fontSize(15),
+                textWeight: FontWeight.w500,
               ),
             ],
           ],

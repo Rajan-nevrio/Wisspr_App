@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../utils/responsive_dimensions.dart';
+import 'customer_text/marcellus_font_type_text.dart';
+
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final ResponsiveDimensions dimension;
   final BuildContext context;
   final String? title;
   final List<Widget>? actions;
@@ -9,6 +13,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({
     super.key,
     required this.context,
+    required this.dimension,
     this.title,
     this.actions,
     this.centerTitle = true,
@@ -16,6 +21,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext _) {
+    final r = dimension;
+
     return SafeArea(
       top: true,
       bottom: false,
@@ -42,14 +49,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
             /// Title
             Expanded(
-              child: Text(
-                title ?? "",
+              child: MText(
+                msg: title ?? "",
                 textAlign: centerTitle ? TextAlign.center : TextAlign.start,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
+                textSize: r.fontSize(20),
+                textWeight: FontWeight.w500,
+                textColor: Theme.of(context).colorScheme.primary,
               ),
             ),
 

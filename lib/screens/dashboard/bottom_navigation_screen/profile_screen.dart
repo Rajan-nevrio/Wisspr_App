@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:wisspr_app/resources/dimension_spacing/vertical_spacing.dart';
 
 import '../../../commom_widgets/custom_appbar.dart';
+import '../../../commom_widgets/customer_text/marcellus_font_type_text.dart';
+import '../../../commom_widgets/customer_text/satoshi_font_type_text.dart';
+import '../../../resources/app_strings.dart';
 import '../../../resources/image_path.dart';
 import '../../../utils/responsive_dimensions.dart';
 
@@ -17,31 +21,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
   List<TileItem> items = [
     TileItem(
       image: ImgPath.myAccount,
-      label: "My Account",
+      label: AppStrings.myAccount,
       icon: Icons.arrow_forward_ios,
     ),
     TileItem(
       image: ImgPath.subscriptionBilling,
-      label: "Subscription & Billing",
+      label: AppStrings.subscriptionBilling,
       icon: Icons.arrow_forward_ios,
     ),
     TileItem(
       image: ImgPath.yourOrder,
-      label: "Your Order",
+      label: AppStrings.yourOrder,
       icon: Icons.arrow_forward_ios,
     ),
     TileItem(
       image: ImgPath.setting,
-      label: "Setting",
+      label: AppStrings.setting,
       icon: Icons.arrow_forward_ios,
     ),
     TileItem(
       image: ImgPath.notificationSetting,
-      label: "Notifications Setting",
+      label: AppStrings.notificationSetting,
       icon: Icons.arrow_forward_ios,
     ),
-    TileItem(image: ImgPath.logout, label: "Logout"),
-    TileItem(image: ImgPath.deleteAccount, label: "Delete Account"),
+    TileItem(image: ImgPath.logout, label: AppStrings.logout),
+    TileItem(image: ImgPath.deleteAccount, label: AppStrings.deleteAccount),
   ];
 
   @override
@@ -61,8 +65,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: CustomAppBar(
+        dimension: _responsive,
         context: context,
-        title: "Profile",
+        title: AppStrings.profile,
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -70,11 +75,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(height: _responsive.height(30)),
+            VerticalSpacing(height: 30),
             profileSection(),
-            SizedBox(height: _responsive.height(30)),
+            VerticalSpacing(height: 30),
             itemListTile(),
-            SizedBox(height: _responsive.height(60)),
+            VerticalSpacing(height: 60),
           ],
         ),
       ),
@@ -94,26 +99,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           child: Image.asset("",
             errorBuilder: (context, error, stackTrace) {
-              return Icon(Icons.person, size: 80, color: Theme.of(context).scaffoldBackgroundColor);
+              return Icon(Icons.person, size: _responsive.fontSize(80), color: Theme.of(context).scaffoldBackgroundColor);
             },
           ),
         ),
-        SizedBox(height: _responsive.height(30)),
-        Text(
-          "Tom Hillson",
-          style: TextStyle(
-            fontWeight: FontWeight.w300,
-            color: Theme.of(context).colorScheme.primary,
-            fontSize: 30,
-          ),
+        VerticalSpacing(height: 30),
+        MText(
+          msg: "Tom Hillson",
+          textWeight: FontWeight.w300,
+          textColor: Theme.of(context).colorScheme.primary,
+          textSize: _responsive.fontSize(30),
         ),
-        Text(
-          "Tomhill@gmail.com",
-          style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w200,
-              color: Theme.of(context).colorScheme.primary,
-          ),
+        SText(
+          msg: "Tomhill@gmail.com",
+          textSize: _responsive.fontSize(16),
+          textWeight: FontWeight.w200,
+          textColor: Theme.of(context).colorScheme.primary,
         ),
       ],
     );
@@ -127,12 +128,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
       itemCount: items.length,
       itemBuilder: (context, index) {
         return ListTile(
-          title: Text(items[index].label,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w200,
-              color: (index + 1) ==  items.length ? Theme.of(context).colorScheme.error : Theme.of(context).colorScheme.primary,
-            ),
+          title: SText(
+            msg: items[index].label,
+            textSize: _responsive.fontSize(20),
+            textWeight: FontWeight.w200,
+            textColor: (index + 1) ==  items.length ? Theme.of(context).colorScheme.error : Theme.of(context).colorScheme.primary,
           ),
           leading: SizedBox(
             width: _responsive.width(20),

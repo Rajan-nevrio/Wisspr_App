@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class AppTheme {
   static const Color _white = Color(0xFFFFFFFF);
   static const Color _black = Color(0xFF0D0D0C);
+  static const Color _blackLight = Color(0xFF2A2A2A);
   static const Color _lightBlack = Color(0xFF2C2C2C);
   static const Color _grey = Color(0xFF999793);
   static const Color _red = Color(0xFFE52E2E);
@@ -30,5 +31,6 @@ class AppTheme {
       scrim: _green,
     ),
     scaffoldBackgroundColor: _black,
+    cardColor: _blackLight,
   );
 }

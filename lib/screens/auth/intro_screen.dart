@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:wisspr_app/theme/font_constants.dart';
+import 'package:provider/provider.dart';
+import 'package:wisspr_app/commom_widgets/customer_text/marcellus_font_type_text.dart';
+import 'package:wisspr_app/commom_widgets/customer_text/satoshi_font_type_text.dart';
+import '../../resources/app_strings.dart';
 import '../../utils/responsive_dimensions.dart';
 import '../../utils/performance_helper.dart';
-import '../../routes/navigation_helper.dart';
+import '../../providers/auth/intro_provider.dart';
 
 class IntroScreen extends StatefulWidget {
   const IntroScreen({super.key});
@@ -13,79 +15,18 @@ class IntroScreen extends StatefulWidget {
 }
 
 class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin {
-  final PageController _pageController = PageController();
-  int _currentPage = 0;
-  late AnimationController _imageAnimationController;
-
-  final List<IntroSlide> _slides = [
-    IntroSlide(
-      title: 'Welcome to Wisspr!',
-      description: 'Your Journey to a Fragrant \nHome Begins Here!',
-      icon: "assets/image/Onboarding-1.png",
-      color: const Color(0x00000000),
-    ),
-    IntroSlide(
-      title: 'Scents for Every Story',
-      description: "Explore curated aromas crafted \nto elevate every space.",
-      icon: "assets/image/Onboarding-2.png",
-      color: const Color(0x00000000),
-    ),
-    IntroSlide(
-      title: 'Intelligence in the Air',
-      description: 'Experience the art of fragrance \nautomation.',
-      icon: "assets/image/Onboarding-3.png",
-      color: const Color(0x00000000),
-    ),
-  ];
+  late IntroProvider _introProvider;
 
   @override
   void initState() {
     super.initState();
-    _imageAnimationController = AnimationController(
-      duration: const Duration(seconds: 3),
-      vsync: this,
-    );
-
-    Tween<double>(
-      begin: 1.0,
-      end: 0.3,
-    ).animate(CurvedAnimation(
-      parent: _imageAnimationController,
-      curve: Curves.easeInOut,
-    ));
-    
-    _imageAnimationController.forward();
-  }
-
-  @override
-  void dispose() {
-    _pageController.dispose();
-    _imageAnimationController.dispose();
-    super.dispose();
-  }
-
-  void _nextPage() {
-    if (_currentPage < _slides.length - 1) {
-      _pageController.nextPage(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
-    } else {
-      _navigateToSignUp();
-    }
-  }
-
-  void _skipIntro() {
-    _navigateToSignUp();
-  }
-
-  void _navigateToSignUp() {
-    NavigationHelper.goToSignup(context);
+    _introProvider = Provider.of<IntroProvider>(context, listen: false);
+    _introProvider.initialize(this);
   }
 
   @override
   Widget build(BuildContext context) {
-    final responsive = ResponsiveDimensions()..init(context);
+    final r = ResponsiveDimensions()..init(context);
 
     return PerformanceHelper.optimizeWidget(
       Scaffold(
@@ -93,48 +34,63 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
         body: SafeArea(
           child: Column(
             children: [
-              /// Skip button (only on first, second screens)
-              if (_currentPage < _slides.length - 1)
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: responsive.height(20),
-                    right: responsive.width(20),
-                  ),
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: TextButton(
-                      onPressed: _skipIntro,
-                      child: Text(
-                        'Skip',
-                        style: TextStyle(
-                          //fontFamily: FontConstants.satoshi,
-                          fontSize: responsive.fontSize(16),
-                          color: Theme.of(context).colorScheme.primary,
-                          fontWeight: FontWeight.w500,
+              /// Skip button with Selector - only rebuilds when shouldShowSkipButton changes
+              Selector<IntroProvider, bool>(
+                selector: (context, provider) => provider.shouldShowSkipButton,
+                builder: (context, shouldShowSkipButton, child) {
+                  if (shouldShowSkipButton) {
+                    return Padding(
+                      padding: EdgeInsets.only(
+                        top: r.height(20),
+                        right: r.width(20),
+                      ),
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                          onPressed: () {
+                            _introProvider.skipIntro(context);
+                          },
+                          child: SText(
+                            msg: AppStrings.skip,
+                            textSize: r.fontSize(18),
+                            textColor: Theme.of(context).colorScheme.primary,
+                            textWeight: FontWeight.w200,
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                ),
+                    );
+                  }
+                  return const SizedBox.shrink();
+                },
+              ),
               
-              /// Page view
-              Expanded(
-                child: PageView.builder(
-                  controller: _pageController,
-                  onPageChanged: (index) {
-                    setState(() {
-                      _currentPage = index;
-                    });
-                  },
-                  itemCount: _slides.length,
-                  itemBuilder: (context, index) {
-                    return _buildSlide(context, _slides[index], responsive);
-                  },
-                ),
+              /// Page view with Selector - only rebuilds when slides change
+              Selector<IntroProvider, List<IntroSlide>>(
+                selector: (context, provider) => provider.slides,
+                builder: (context, slides, child) {
+                  return Expanded(
+                    child: PageView.builder(
+                      controller: _introProvider.pageController,
+                      onPageChanged: _introProvider.onPageChanged,
+                      itemCount: slides.length,
+                      itemBuilder: (context, index) {
+                        return _buildSlide(context, slides[index], r);
+                      },
+                    ),
+                  );
+                },
               ),
 
-              /// Page indicators and navigation.
-              _buildBottomSection(responsive),
+              /// Bottom section with Selector - only rebuilds when currentPage or isLastPage changes
+              Selector<IntroProvider, ({int currentPage, bool isLastPage})>(
+                selector: (context, provider) => (
+                  currentPage: provider.currentPage,
+                  isLastPage: provider.isLastPage,
+                ),
+                builder: (context, data, child) {
+                  return _buildBottomSection(data.currentPage, data.isLastPage, r);
+                },
+              ),
             ],
           ),
         ),
@@ -167,17 +123,13 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
               opacity: value,
               child: Transform.translate(
                 offset: Offset(0, 20 * (1 - value)),
-                child: Text(
-                  slide.title,
-                  style: GoogleFonts.marcellus(
-                    textStyle: TextStyle(
-                      fontSize: responsive.fontSize(28),
-                      fontWeight: FontWeight.w400,
-                      color: Theme.of(context).colorScheme.primary,
-                      letterSpacing: 1.2,
-                    ),
-                  ),
+                child: MText(
+                  msg: slide.title,
                   textAlign: TextAlign.center,
+                  textSize: responsive.fontSize(28),
+                  textWeight: FontWeight.w400,
+                  textColor: Theme.of(context).colorScheme.primary,
+                  letterSpacing: 1.2,
                 ),
               ),
             );
@@ -194,18 +146,14 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
               opacity: value,
               child: Transform.translate(
                 offset: Offset(0, 20 * (1 - value)),
-                child: Text(
-                  slide.description,
-                  style: GoogleFonts.marcellus(
-                    textStyle: TextStyle(
-                      fontSize: responsive.fontSize(16),
-                      fontWeight: FontWeight.w400,
-                      color: Theme.of(context).colorScheme.tertiary,
-                      height: 1.5,
-                      letterSpacing: 0.3,
-                    ),
-                  ),
+                child: SText(
+                  msg: slide.description,
                   textAlign: TextAlign.center,
+                  textSize: responsive.fontSize(18),
+                  textWeight: FontWeight.w300,
+                  textColor: Theme.of(context).colorScheme.tertiary,
+                  height: 1.5,
+                  letterSpacing: 0.3,
                 ),
               ),
             );
@@ -216,7 +164,7 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
   }
 
   /// Widget to show bottom navigation UI.
-  Widget _buildBottomSection(ResponsiveDimensions responsive) {
+  Widget _buildBottomSection(int currentPage, bool isLastPage, ResponsiveDimensions responsive) {
     return Padding(
       padding: EdgeInsets.symmetric(
         horizontal: responsive.width(40),
@@ -226,12 +174,14 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
         children: [
 
           /// Continue button (only on last screen).
-          if (_currentPage == _slides.length - 1)
+          if (isLastPage)
             SizedBox(
               width: double.infinity,
               height: responsive.height(56),
               child: ElevatedButton(
-                onPressed: _nextPage,
+                onPressed: () {
+                  _introProvider.nextPage(context);
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Theme.of(context).colorScheme.primary,
                   foregroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -240,27 +190,30 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
                   ),
                   elevation: 0,
                 ),
-                child: Text(
-                  'Continue',
-                  style: TextStyle(
-                    //fontFamily: FontConstants.satoshi,
-                    fontSize: responsive.fontSize(16),
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: 0.5,
-                  ),
+                child: SText(
+                  msg: AppStrings.bContinue,
+                  textSize: responsive.fontSize(18),
+                  textWeight: FontWeight.w600,
+                  textColor: Theme.of(context).scaffoldBackgroundColor,
+                  letterSpacing: 0.5,
                 ),
               ),
             ),
 
-          SizedBox(height: responsive.height(40)),
+          SizedBox(height: responsive.height(50)),
 
-          /// Page indicators.
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(
-              _slides.length,
-                  (index) => _buildPageIndicator(index, responsive),
-            ),
+          /// Page indicators with Selector - only rebuilds when currentPage changes
+          Selector<IntroProvider, int>(
+            selector: (context, provider) => provider.currentPage,
+            builder: (context, currentPage, child) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(
+                  _introProvider.slides.length,
+                      (index) => _buildPageIndicator(index, currentPage, responsive),
+                ),
+              );
+            },
           ),
         ],
       ),
@@ -268,13 +221,13 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
   }
 
   /// Widgets used to show the indicator UI.
-  Widget _buildPageIndicator(int index, ResponsiveDimensions responsive) {
-    final isActive = index == _currentPage;
+  Widget _buildPageIndicator(int index, int currentPage, ResponsiveDimensions responsive) {
+    final isActive = index == currentPage;
     
     return Container(
       margin: EdgeInsets.symmetric(horizontal: responsive.width(4)),
       width: responsive.width(24),
-      height: responsive.height(5),
+      height: responsive.height(3),
       decoration: BoxDecoration(
         color: isActive ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.tertiary,
         shape: BoxShape.rectangle,
@@ -282,19 +235,4 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
       ),
     );
   }
-}
-
-/// Model to pass UI data.
-class IntroSlide {
-  final String title;
-  final String description;
-  final String icon;
-  final Color color;
-
-  IntroSlide({
-    required this.title,
-    required this.description,
-    required this.icon,
-    required this.color,
-  });
 }

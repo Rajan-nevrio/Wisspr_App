@@ -1,8 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:wisspr_app/providers/auth/sign_up_provider.dart';
+import 'package:wisspr_app/providers/auth/splash_provider.dart';
+import 'package:wisspr_app/providers/dashboard/dashboard_provider.dart';
+import 'package:wisspr_app/resources/app_strings.dart';
+import 'commom_widgets/customer_text/marcellus_font_type_text.dart';
 import 'theme/app_theme.dart';
 import 'utils/shared_preferences_helper.dart';
 import 'utils/performance_helper.dart';
 import 'routes/app_routes.dart';
+import 'providers/auth/intro_provider.dart';
+
+String appVersion = "Version 1.0";
+String serverBaseUrl = "staging";
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,24 +27,37 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: AppTheme.whiteTheme,
-      initialRoute: AppRoutes.splash,
-      routes: AppRoutes.routes,
-      onGenerateRoute: AppRoutes.generateRoute,
-      debugShowCheckedModeBanner: false,
-      builder: (context, child) {
-        return RepaintBoundary(child: child!);
-      },
-      onUnknownRoute: (settings) {
-        return MaterialPageRoute(
-          builder: (context) => const Scaffold(
-            body: Center(
-              child: Text('Page not found'),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => SplashProvider()),
+        ChangeNotifierProvider(create: (_) => IntroProvider()),
+        ChangeNotifierProvider(create: (_) => SignUpProvider()),
+        ChangeNotifierProvider(create: (_) => DashBoardProvider()),
+      ],
+      child: MaterialApp(
+        theme: AppTheme.whiteTheme,
+        initialRoute: AppRoutes.splash,
+        routes: AppRoutes.routes,
+        onGenerateRoute: AppRoutes.generateRoute,
+        debugShowCheckedModeBanner: false,
+        builder: (context, child) {
+          return RepaintBoundary(child: child!);
+        },
+        onUnknownRoute: (settings) {
+          return MaterialPageRoute(
+            builder: (context) => Scaffold(
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+              body: Center(
+                child: MText(
+                  msg: AppStrings.pageNotFound,
+                  textSize: 22,
+                  textColor: Theme.of(context).colorScheme.primary,
+                ),
+              ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

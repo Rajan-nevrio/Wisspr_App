@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import '../../theme/font_constants.dart';
+import 'package:provider/provider.dart';
+import 'package:wisspr_app/commom_widgets/customer_text/marcellus_font_type_text.dart';
+import 'package:wisspr_app/commom_widgets/customer_text/satoshi_font_type_text.dart';
+import 'package:wisspr_app/resources/dimension_spacing/horizontal_spacing.dart';
+import 'package:wisspr_app/resources/dimension_spacing/vertical_spacing.dart';
+import '../../providers/auth/sign_up_provider.dart';
+import '../../resources/app_strings.dart';
+import '../../resources/font_constants.dart';
+import '../../resources/image_path.dart';
 import '../../utils/responsive_dimensions.dart';
 import '../../utils/performance_helper.dart';
-import '../../routes/navigation_helper.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -15,7 +21,7 @@ class SignupScreen extends StatefulWidget {
 class _SignupScreenState extends State<SignupScreen> {
   @override
   Widget build(BuildContext context) {
-    final responsive = ResponsiveDimensions()..init(context);
+    final r = ResponsiveDimensions()..init(context);
 
     return PerformanceHelper.optimizeWidget(
       Scaffold(
@@ -23,197 +29,37 @@ class _SignupScreenState extends State<SignupScreen> {
         body: SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(
-              horizontal: responsive.width(24),
-              vertical: responsive.height(40),
+              horizontal: r.width(24),
+              vertical: r.height(40),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Column(
-                  children: [
-                    SizedBox(height: responsive.height(60)),
-                    
-                    // Logo
-                    SizedBox(
-                      width: responsive.width(80),
-                      height: responsive.width(160),
-                      child: Image.asset(
-                        'assets/logo/app_logo.png',
-                        fit: BoxFit.contain,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Icon(
-                            Icons.apps,
-                            size: responsive.width(60),
-                            color: Theme.of(context).colorScheme.primary,
-                          );
-                        },
-                      ),
-                    ),
-                    
-                    // App name
-                    Text(
-                      'Wisspr',
-                      style: GoogleFonts.marcellus(
-                        textStyle: TextStyle(
-                          fontSize: responsive.fontSize(32),
-                          fontWeight: FontWeight.w400,
-                          color: Theme.of(context).colorScheme.primaryFixed,
-                          letterSpacing: 1.2,
-                        ),
-                      ),
-                    ),
-                  ],
+                header(r),
+                VerticalSpacing(height: 60),
+                description(r),
+                VerticalSpacing(height: 30),
+                
+                /// Google button with Selector - only rebuilds when isGoogleLoader changes
+                Selector<SignUpProvider, bool>(
+                  selector: (context, provider) => provider.isGoogleLoader,
+                  builder: (context, isGoogleLoader, child) {
+                    return googleLoginBtn(isGoogleLoader, r);
+                  },
                 ),
-
-                // Middle section with call to action
-                Column(
-                  children: [
-                    // Main title
-                    Text(
-                      'Join the Fragrance Experience',
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.marcellus(
-                        textStyle: TextStyle(
-                          fontSize: responsive.fontSize(24),
-                          fontWeight: FontWeight.w400,
-                          color: Theme.of(context).colorScheme.primary,
-                          letterSpacing: 0.5,
-                        ),
-                      ),
-                    ),
-                    
-                    SizedBox(height: responsive.height(16)),
-                    
-                    // Description
-                    Text(
-                      'Step into a world where every scent tells a story.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: responsive.fontSize(15),
-                        fontWeight: FontWeight.w400,
-                        color: Theme.of(context).colorScheme.tertiary,
-                        height: 1.5,
-                        letterSpacing: 0.3,
-                      ),
-                    ),
-                  ],
+                
+                VerticalSpacing(height: 16),
+                
+                /// Apple button with Selector - only rebuilds when isAppleLoader changes
+                Selector<SignUpProvider, bool>(
+                  selector: (context, provider) => provider.isAppleLoader,
+                  builder: (context, isAppleLoader, child) {
+                    return appleLoginBtn(isAppleLoader, r);
+                  },
                 ),
-
-                // Bottom section with login buttons
-                Column(
-                  children: [
-                    // Google login button
-                    SizedBox(
-                      width: double.infinity,
-                      height: responsive.height(56),
-                      child: ElevatedButton(
-                        onPressed: _handleGoogleLogin,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Theme.of(context).colorScheme.surface,
-                          foregroundColor: Theme.of(context).colorScheme.primary,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          elevation: 0,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            // Google logo
-                            SizedBox(
-                              width: responsive.width(20),
-                              height: responsive.height(20),
-                              child: Image.asset("assets/image/google_icon.png"),
-                            ),
-                            SizedBox(width: responsive.width(12)),
-                            Text(
-                              'Login with Google',
-                              style: TextStyle(
-                                //fontFamily: FontConstants.satoshi,
-                                fontSize: responsive.fontSize(16),
-                                fontWeight: FontWeight.w500,
-                                color: Theme.of(context).colorScheme.onSecondary,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    
-                    SizedBox(height: responsive.height(16)),
-                    
-                    // Apple login button
-                    SizedBox(
-                      width: double.infinity,
-                      height: responsive.height(56),
-                      child: ElevatedButton(
-                        onPressed: _handleAppleLogin,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Theme.of(context).colorScheme.surface,
-                          foregroundColor: Theme.of(context).colorScheme.primary,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          elevation: 0,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            // Apple logo
-                            Icon(
-                              Icons.apple,
-                              size: responsive.width(25),
-                              color: Theme.of(context).colorScheme.tertiary,
-                            ),
-                            SizedBox(width: responsive.width(12)),
-                            Text(
-                              'Login with Apple',
-                              style: TextStyle(
-                               // fontFamily: FontConstants.satoshi,
-                                fontSize: responsive.fontSize(16),
-                                fontWeight: FontWeight.w500,
-                                color: Theme.of(context).colorScheme.onSecondary,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    
-                    SizedBox(height: responsive.height(120)),
-                    
-                    // Legal text
-                    RichText(
-                      textAlign: TextAlign.center,
-                      text: TextSpan(
-                        style: TextStyle(
-                          fontSize: responsive.fontSize(14),
-                          color: Theme.of(context).colorScheme.tertiary,
-                          //fontFamily: FontConstants.satoshi,
-                        ),
-                        children: [
-                          const TextSpan(text: 'By continuing, you agree to our '),
-                          TextSpan(
-                            text: 'Terms of Service',
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.primary,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          const TextSpan(text: ' & '),
-                          TextSpan(
-                            text: 'Privacy Policy',
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.primary,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          const TextSpan(text: '.'),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                
+                VerticalSpacing(height: 80),
+                bottomDescription(r),
               ],
             ),
           ),
@@ -222,17 +68,206 @@ class _SignupScreenState extends State<SignupScreen> {
     );
   }
 
-  void _handleGoogleLogin() {
-    // TODO: Implement Google login
-    print('Google login pressed');
-    // For now, navigate to main navigation
-    NavigationHelper.goToHome(context);
+  /// Top header UI.
+  Widget header(ResponsiveDimensions r) {
+    return Column(
+      children: [
+        VerticalSpacing(height: 50),
+        SizedBox(
+          width: r.width(80),
+          height: r.width(160),
+          child: Image.asset(
+            ImgPath.appLogo,
+            fit: BoxFit.contain,
+            errorBuilder: (context, error, stackTrace) {
+              return Icon(
+                Icons.apps,
+                size: r.width(60),
+                color: Theme.of(context).colorScheme.primary,
+              );
+            },
+          ),
+        ),
+        MText(
+          msg: AppStrings.appName,
+          textSize: r.fontSize(32),
+          textWeight: FontWeight.w400,
+          textColor: Theme.of(context).colorScheme.primaryFixed,
+          letterSpacing: 1.2,
+        ),
+      ],
+    );
   }
 
-  void _handleAppleLogin() {
-    // TODO: Implement Apple login
-    print('Apple login pressed');
-    // For now, navigate to main navigation
-    NavigationHelper.goToHome(context);
+  /// Description UI.
+  Widget description(ResponsiveDimensions r) {
+    return Column(
+      children: [
+        SText(
+          msg: AppStrings.joinTheFragranceExperience,
+          textAlign: TextAlign.center,
+          textSize: r.fontSize(24),
+          textWeight: FontWeight.w400,
+          textColor: Theme.of(context).colorScheme.primary,
+          letterSpacing: 0.5,
+        ),
+        VerticalSpacing(height: 16),
+        SText(
+          msg: AppStrings.stepIntoAWorldWhereEveryScentTellsStory,
+          textAlign: TextAlign.center,
+          textSize: r.fontSize(15),
+          textWeight: FontWeight.w400,
+          textColor: Theme.of(context).colorScheme.tertiary,
+          height: 1.5,
+          letterSpacing: 0.3,
+        ),
+      ],
+    );
+  }
+
+  /// Google login button UI.
+  Widget googleLoginBtn(bool isLoading, ResponsiveDimensions r) {
+    return SizedBox(
+      width: r.screenWidth,
+      height: r.height(56),
+      child: ElevatedButton(
+        onPressed: isLoading
+            ? () => debugPrint("Google login:-----> Already running")
+            : () {
+                final provider = Provider.of<SignUpProvider>(context, listen: false);
+                provider.handleGoogleLogin(context);
+              },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Theme.of(context).colorScheme.surface,
+          foregroundColor: Theme.of(context).colorScheme.primary,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          elevation: 0,
+        ),
+        child: isLoading
+            ? Center(
+                child: SizedBox(
+                  height: r.height(25),
+                  width: r.height(25),
+                  child: CircularProgressIndicator(
+                    color: Theme.of(context).colorScheme.primary,
+                    strokeWidth: 2,
+                  ),
+                ),
+              )
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: r.width(22),
+                    height: r.height(22),
+                    child: Image.asset(
+                      ImgPath.googleIcon,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Icon(
+                          Icons.apps,
+                          size: r.fontSize(30),
+                          color: Theme.of(context).colorScheme.primary,
+                        );
+                      },
+                    ),
+                  ),
+                  HorizontalSpacing(width: 12),
+                  SText(
+                    msg: AppStrings.loginWithGoogle,
+                    textSize: r.fontSize(18),
+                    textWeight: FontWeight.w400,
+                    textColor: Theme.of(context).colorScheme.onSecondary,
+                  ),
+                ],
+              ),
+      ),
+    );
+  }
+
+  /// Apple login button UI.
+  Widget appleLoginBtn(bool isLoading, ResponsiveDimensions r) {
+    return SizedBox(
+      width: r.screenWidth,
+      height: r.height(56),
+      child: ElevatedButton(
+        onPressed: isLoading
+            ? () => debugPrint("Apple Login:------> Already running")
+            : () {
+                final provider = Provider.of<SignUpProvider>(context, listen: false);
+                provider.handleAppleLogin(context);
+              },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Theme.of(context).colorScheme.surface,
+          foregroundColor: Theme.of(context).colorScheme.primary,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          elevation: 0,
+        ),
+        child: isLoading
+            ? Center(
+                child: SizedBox(
+                  height: r.height(25),
+                  width: r.height(25),
+                  child: CircularProgressIndicator(
+                    color: Theme.of(context).colorScheme.primary,
+                    strokeWidth: 2,
+                  ),
+                ),
+              )
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.apple,
+                    size: r.fontSize(30),
+                    color: Theme.of(context).colorScheme.tertiary,
+                  ),
+                  HorizontalSpacing(width: 12),
+                  SText(
+                    msg: AppStrings.loginWithApple,
+                    textSize: r.fontSize(18),
+                    textWeight: FontWeight.w400,
+                    textColor: Theme.of(context).colorScheme.onSecondary,
+                  ),
+                ],
+              ),
+      ),
+    );
+  }
+
+  /// Bottom description UI.
+  Widget bottomDescription(ResponsiveDimensions r) {
+    return RichText(
+      textAlign: TextAlign.center,
+      text: TextSpan(
+        style: TextStyle(
+          fontSize: r.fontSize(14),
+          color: Theme.of(context).colorScheme.tertiary,
+          fontFamily: FontConstants.satoshi,
+        ),
+        children: [
+          TextSpan(text: AppStrings.byContinuingYouAgreeToOur),
+          TextSpan(
+            text: AppStrings.termsOfService,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.primary,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          TextSpan(text: AppStrings.a),
+          TextSpan(
+            text: AppStrings.privacyPolicy,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.primary,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          const TextSpan(text: '.'),
+        ],
+      ),
+    );
   }
 }
