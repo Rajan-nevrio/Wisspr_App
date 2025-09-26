@@ -43,5 +43,12 @@ class AppStrings {
   static String setting = "Setting";
   static String notificationSetting = "Notifications Setting";
   static String logout = "Logout";
+  static String thisWillLogoutYourAccount = "This will logout your account.";
+  static String areYouSureYouWantToLogoutYourAccount = "Are you sure you want to logout your account.";
   static String deleteAccount = "Delete Account";
+  static String thisWillDeleteYourAccount = "This will delete your account.";
+  static String areYouSureYouWantToDoThisThisWillPermanentlyDeleteYourAccount = "Are you sure you want to do this? This will permanently delete your account.";
+
+  /// Common Strings
+  static String cancel = "Cancel";
 }

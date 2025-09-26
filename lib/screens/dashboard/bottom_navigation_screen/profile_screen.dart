@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:wisspr_app/commom_widgets/dialog.dart';
 import 'package:wisspr_app/resources/dimension_spacing/vertical_spacing.dart';
-
 import '../../../commom_widgets/custom_appbar.dart';
 import '../../../commom_widgets/customer_text/marcellus_font_type_text.dart';
 import '../../../commom_widgets/customer_text/satoshi_font_type_text.dart';
@@ -18,35 +18,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   late ResponsiveDimensions _responsive;
 
-  List<TileItem> items = [
-    TileItem(
-      image: ImgPath.myAccount,
-      label: AppStrings.myAccount,
-      icon: Icons.arrow_forward_ios,
-    ),
-    TileItem(
-      image: ImgPath.subscriptionBilling,
-      label: AppStrings.subscriptionBilling,
-      icon: Icons.arrow_forward_ios,
-    ),
-    TileItem(
-      image: ImgPath.yourOrder,
-      label: AppStrings.yourOrder,
-      icon: Icons.arrow_forward_ios,
-    ),
-    TileItem(
-      image: ImgPath.setting,
-      label: AppStrings.setting,
-      icon: Icons.arrow_forward_ios,
-    ),
-    TileItem(
-      image: ImgPath.notificationSetting,
-      label: AppStrings.notificationSetting,
-      icon: Icons.arrow_forward_ios,
-    ),
-    TileItem(image: ImgPath.logout, label: AppStrings.logout),
-    TileItem(image: ImgPath.deleteAccount, label: AppStrings.deleteAccount),
-  ];
+  List<TileItem>? items;
 
   @override
   void initState() {
@@ -62,6 +34,77 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    items = [
+      TileItem(
+        image: ImgPath.myAccount,
+        label: AppStrings.myAccount,
+        icon: Icons.arrow_forward_ios,
+        onPressed: () {},
+      ),
+      TileItem(
+        image: ImgPath.subscriptionBilling,
+        label: AppStrings.subscriptionBilling,
+        icon: Icons.arrow_forward_ios,
+        onPressed: () {},
+      ),
+      TileItem(
+        image: ImgPath.yourOrder,
+        label: AppStrings.yourOrder,
+        icon: Icons.arrow_forward_ios,
+        onPressed: () {},
+      ),
+      TileItem(
+        image: ImgPath.setting,
+        label: AppStrings.setting,
+        icon: Icons.arrow_forward_ios,
+        onPressed: () {},
+      ),
+      TileItem(
+        image: ImgPath.notificationSetting,
+        label: AppStrings.notificationSetting,
+        icon: Icons.arrow_forward_ios,
+        onPressed: () {},
+      ),
+      TileItem(
+        image: ImgPath.logout,
+        label: AppStrings.logout,
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (context) => CustomDialog(
+              title: AppStrings.thisWillLogoutYourAccount,
+              description: AppStrings.areYouSureYouWantToLogoutYourAccount,
+              sOnPressed: () {
+                debugPrint("LOGOUT:-----> Call Logout Method");
+              },
+              sButtonColor: Theme.of(context).colorScheme.error,
+              sButtonName: AppStrings.logout,
+              sButtonTextColor: Theme.of(context).colorScheme.primary,
+            ),
+          );
+        },
+      ),
+      TileItem(
+        image: ImgPath.deleteAccount,
+        label: AppStrings.deleteAccount,
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (context) => CustomDialog(
+              title: AppStrings.thisWillDeleteYourAccount,
+              description: AppStrings.areYouSureYouWantToDoThisThisWillPermanentlyDeleteYourAccount,
+              sOnPressed: () {
+                debugPrint("DELETE ACCOUNT:-----> Call Delete Account Method");
+              },
+              sButtonColor: Theme.of(context).colorScheme.error,
+              sButtonName: AppStrings.deleteAccount,
+              sButtonTextColor: Theme.of(context).colorScheme.primary,
+            ),
+          );
+        },
+      ),
+    ];
+
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: CustomAppBar(
@@ -97,9 +140,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
             borderRadius: BorderRadius.circular(200),
             color: Colors.grey,
           ),
-          child: Image.asset("",
+          child: Image.asset(
+            "",
             errorBuilder: (context, error, stackTrace) {
-              return Icon(Icons.person, size: _responsive.fontSize(80), color: Theme.of(context).scaffoldBackgroundColor);
+              return Icon(
+                Icons.person,
+                size: _responsive.fontSize(80),
+                color: Theme.of(context).scaffoldBackgroundColor,
+              );
             },
           ),
         ),
@@ -125,24 +173,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return ListView.builder(
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
-      itemCount: items.length,
+      itemCount: items?.length ?? 0,
       itemBuilder: (context, index) {
         return ListTile(
+          onTap: items?[index].onPressed,
           title: SText(
-            msg: items[index].label,
+            msg: items?[index].label ?? "",
             textSize: _responsive.fontSize(20),
             textWeight: FontWeight.w200,
-            textColor: (index + 1) ==  items.length ? Theme.of(context).colorScheme.error : Theme.of(context).colorScheme.primary,
+            textColor: (index + 1) == items?.length
+                ? Theme.of(context).colorScheme.error
+                : Theme.of(context).colorScheme.primary,
           ),
           leading: SizedBox(
             width: _responsive.width(20),
             height: _responsive.height(20),
-            child: Image.asset(items[index].image,
-              color: (index + 1) ==  items.length ? Theme.of(context).colorScheme.error : Theme.of(context).colorScheme.tertiary,
+            child: Image.asset(
+              items?[index].image ?? "",
+              color: (index + 1) == items?.length
+                  ? Theme.of(context).colorScheme.error
+                  : Theme.of(context).colorScheme.tertiary,
               fit: BoxFit.contain,
             ),
           ),
-          trailing: Icon(items[index].icon,
+          trailing: Icon(
+            items?[index].icon,
             size: 16,
             color: Theme.of(context).colorScheme.tertiary,
           ),
@@ -157,6 +212,12 @@ class TileItem {
   String image;
   String label;
   IconData? icon;
+  void Function() onPressed;
 
-  TileItem({required this.image, required this.label, this.icon});
+  TileItem({
+    required this.onPressed,
+    required this.image,
+    required this.label,
+    this.icon,
+  });
 }

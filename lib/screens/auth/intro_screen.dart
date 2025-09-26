@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wisspr_app/commom_widgets/customer_text/marcellus_font_type_text.dart';
 import 'package:wisspr_app/commom_widgets/customer_text/satoshi_font_type_text.dart';
+import 'package:wisspr_app/resources/dimension_spacing/vertical_spacing.dart';
+import '../../commom_widgets/custom_buttons/custom_elevated_button.dart';
+import '../../commom_widgets/custom_buttons/custom_text_button.dart';
 import '../../resources/app_strings.dart';
 import '../../utils/responsive_dimensions.dart';
 import '../../utils/performance_helper.dart';
@@ -46,16 +49,14 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
                       ),
                       child: Align(
                         alignment: Alignment.centerRight,
-                        child: TextButton(
+                        child: CustomTextButton(
                           onPressed: () {
                             _introProvider.skipIntro(context);
                           },
-                          child: SText(
-                            msg: AppStrings.skip,
-                            textSize: r.fontSize(18),
-                            textColor: Theme.of(context).colorScheme.primary,
-                            textWeight: FontWeight.w200,
-                          ),
+                          buttonName: AppStrings.skip,
+                          textSize: r.fontSize(18),
+                          textColor: Theme.of(context).colorScheme.primary,
+                          textWeight: FontWeight.w200,
                         ),
                       ),
                     );
@@ -175,32 +176,13 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
 
           /// Continue button (only on last screen).
           if (isLastPage)
-            SizedBox(
-              width: double.infinity,
-              height: responsive.height(56),
-              child: ElevatedButton(
-                onPressed: () {
-                  _introProvider.nextPage(context);
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.primary,
-                  foregroundColor: Theme.of(context).scaffoldBackgroundColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(28),
-                  ),
-                  elevation: 0,
-                ),
-                child: SText(
-                  msg: AppStrings.bContinue,
-                  textSize: responsive.fontSize(18),
-                  textWeight: FontWeight.w600,
-                  textColor: Theme.of(context).scaffoldBackgroundColor,
-                  letterSpacing: 0.5,
-                ),
-              ),
+            CustomElevatedButton(
+              buttonName: AppStrings.bContinue,
+              onPressed: () {
+                _introProvider.nextPage(context);
+              },
             ),
-
-          SizedBox(height: responsive.height(50)),
+          VerticalSpacing(height: 50),
 
           /// Page indicators with Selector - only rebuilds when currentPage changes
           Selector<IntroProvider, int>(
