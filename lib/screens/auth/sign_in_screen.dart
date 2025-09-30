@@ -4,21 +4,21 @@ import 'package:wisspr_app/commom_widgets/customer_text/marcellus_font_type_text
 import 'package:wisspr_app/commom_widgets/customer_text/satoshi_font_type_text.dart';
 import 'package:wisspr_app/resources/dimension_spacing/horizontal_spacing.dart';
 import 'package:wisspr_app/resources/dimension_spacing/vertical_spacing.dart';
-import '../../providers/auth/sign_up_provider.dart';
+import '../../providers/auth/sign_in_provider.dart';
 import '../../resources/app_strings.dart';
 import '../../resources/font_constants.dart';
 import '../../resources/image_path.dart';
 import '../../utils/responsive_dimensions.dart';
 import '../../utils/performance_helper.dart';
 
-class SignupScreen extends StatefulWidget {
-  const SignupScreen({super.key});
+class SignInScreen extends StatefulWidget {
+  const SignInScreen({super.key});
 
   @override
-  State<SignupScreen> createState() => _SignupScreenState();
+  State<SignInScreen> createState() => _SignInScreenState();
 }
 
-class _SignupScreenState extends State<SignupScreen> {
+class _SignInScreenState extends State<SignInScreen> {
   @override
   Widget build(BuildContext context) {
     final r = ResponsiveDimensions()..init(context);

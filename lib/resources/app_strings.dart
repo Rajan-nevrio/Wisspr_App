@@ -1,5 +1,10 @@
 class AppStrings {
+
+  /// Unknown screen strings
+  static String unknownScreen = "Unknown Screen";
   static String pageNotFound = 'Page not found';
+  static String thisScreenIsInderConstruction = 'This screen is under construction';
+  static String goBack = 'Go Back';
 
   /// Authentication screen strings.
   static String appName = "Wisspr";
@@ -37,7 +42,7 @@ class AppStrings {
   static String refills = 'Refills';
 
   /// Profile screen strings.
-  static String myAccount = "Your Order";
+  static String myAccount = "My Account";
   static String subscriptionBilling = "Subscription & Billing";
   static String yourOrder = "Your Order";
   static String setting = "Setting";
@@ -48,6 +53,27 @@ class AppStrings {
   static String deleteAccount = "Delete Account";
   static String thisWillDeleteYourAccount = "This will delete your account.";
   static String areYouSureYouWantToDoThisThisWillPermanentlyDeleteYourAccount = "Are you sure you want to do this? This will permanently delete your account.";
+
+  /// My Account screen strings.
+  static String name = "Name";
+  static String enterUserNameHere = "Enter user name here";
+  static String email = "Email";
+  static String enterEmailHere = "Enter email here";
+  static String mobNumber = "Mobile Number";
+  static String enterMobNoHere = "Enter mobile number here";
+  static String update = "Update";
+  static String imageSource = "Image Source";
+  static String gallery = 'Gallery';
+  static String camera = "Camera";
+
+  /// Setting Screen strings.
+  static String dataPrivacy = "Data & Privacy";
+
+  /// Notification Setting Screen strings.
+  static String newOffers = "New Offers";
+  static String accountUpdate = "Account Update";
+  static String orderConfirmation = "Order Confirmation";
+  static String orderTracking = "Order Tracking";
 
   /// Common Strings
   static String cancel = "Cancel";

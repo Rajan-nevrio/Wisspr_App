@@ -74,7 +74,7 @@ class IntroProvider extends ChangeNotifier {
 
   /// Navigate to signup screen
   void navigateToSignUp(BuildContext context) {
-    NavigationHelper.goToSignup(context);
+    NavigationHelper.goToSignIn(context);
     notifyListeners();
   }
 

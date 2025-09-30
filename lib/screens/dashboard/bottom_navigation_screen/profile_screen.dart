@@ -6,6 +6,9 @@ import '../../../commom_widgets/customer_text/marcellus_font_type_text.dart';
 import '../../../commom_widgets/customer_text/satoshi_font_type_text.dart';
 import '../../../resources/app_strings.dart';
 import '../../../resources/image_path.dart';
+import 'package:provider/provider.dart';
+import '../../../providers/dashboard/botton_navigation_providers/profile_provider.dart';
+import '../../../routes/navigation_helper.dart';
 import '../../../utils/responsive_dimensions.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -17,7 +20,6 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   late ResponsiveDimensions _responsive;
-
   List<TileItem>? items;
 
   @override
@@ -39,7 +41,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         image: ImgPath.myAccount,
         label: AppStrings.myAccount,
         icon: Icons.arrow_forward_ios,
-        onPressed: () {},
+        onPressed: () => NavigationHelper.goToMyAccount(context),
       ),
       TileItem(
         image: ImgPath.subscriptionBilling,
@@ -57,13 +59,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
         image: ImgPath.setting,
         label: AppStrings.setting,
         icon: Icons.arrow_forward_ios,
-        onPressed: () {},
+        onPressed: () => NavigationHelper.goToSetting(context),
       ),
       TileItem(
         image: ImgPath.notificationSetting,
         label: AppStrings.notificationSetting,
         icon: Icons.arrow_forward_ios,
-        onPressed: () {},
+        onPressed: () => NavigationHelper.goToNotificationSetting(context),
       ),
       TileItem(
         image: ImgPath.logout,
@@ -71,16 +73,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
         onPressed: () {
           showDialog(
             context: context,
-            builder: (context) => CustomDialog(
-              title: AppStrings.thisWillLogoutYourAccount,
-              description: AppStrings.areYouSureYouWantToLogoutYourAccount,
-              sOnPressed: () {
-                debugPrint("LOGOUT:-----> Call Logout Method");
-              },
-              sButtonColor: Theme.of(context).colorScheme.error,
-              sButtonName: AppStrings.logout,
-              sButtonTextColor: Theme.of(context).colorScheme.primary,
-            ),
+            builder: (context) {
+              final isLoading = context.select<ProfileProvider, bool>((p) => p.isLogoutLoading);
+              return CustomDialog(
+                title: AppStrings.thisWillLogoutYourAccount,
+                description: AppStrings.areYouSureYouWantToLogoutYourAccount,
+                sOnPressed: isLoading
+                    ? () {}
+                    : () async {
+                        await context.read<ProfileProvider>().logout(context);
+                      },
+                sButtonColor: Theme.of(context).colorScheme.error,
+                sButtonName: AppStrings.logout,
+                sButtonTextColor: Theme.of(context).colorScheme.primary,
+              );
+            },
           );
         },
       ),
@@ -90,16 +97,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
         onPressed: () {
           showDialog(
             context: context,
-            builder: (context) => CustomDialog(
-              title: AppStrings.thisWillDeleteYourAccount,
-              description: AppStrings.areYouSureYouWantToDoThisThisWillPermanentlyDeleteYourAccount,
-              sOnPressed: () {
-                debugPrint("DELETE ACCOUNT:-----> Call Delete Account Method");
-              },
-              sButtonColor: Theme.of(context).colorScheme.error,
-              sButtonName: AppStrings.deleteAccount,
-              sButtonTextColor: Theme.of(context).colorScheme.primary,
-            ),
+            builder: (context) {
+              final isLoading = context.select<ProfileProvider, bool>((p) => p.isDeleteLoading);
+              return CustomDialog(
+                title: AppStrings.thisWillDeleteYourAccount,
+                description: AppStrings.areYouSureYouWantToDoThisThisWillPermanentlyDeleteYourAccount,
+                sOnPressed: isLoading
+                    ? () {}
+                    : () async {
+                        await context.read<ProfileProvider>().deleteAccount(context);
+                      },
+                sButtonColor: Theme.of(context).colorScheme.error,
+                sButtonName: AppStrings.deleteAccount,
+                sButtonTextColor: Theme.of(context).colorScheme.primary,
+              );
+            },
           );
         },
       ),
@@ -140,15 +152,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
             borderRadius: BorderRadius.circular(200),
             color: Colors.grey,
           ),
-          child: Image.asset(
-            "",
-            errorBuilder: (context, error, stackTrace) {
-              return Icon(
-                Icons.person,
-                size: _responsive.fontSize(80),
-                color: Theme.of(context).scaffoldBackgroundColor,
-              );
-            },
+          child: Center(
+            child: Icon(
+              Icons.person,
+              size: _responsive.fontSize(80),
+              color: Theme.of(context).scaffoldBackgroundColor,
+            ),
           ),
         ),
         VerticalSpacing(height: 30),
@@ -159,7 +168,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           textSize: _responsive.fontSize(30),
         ),
         SText(
-          msg: "Tomhill@gmail.com",
+          msg: "tomhillson@gamil.com",
           textSize: _responsive.fontSize(16),
           textWeight: FontWeight.w200,
           textColor: Theme.of(context).colorScheme.primary,

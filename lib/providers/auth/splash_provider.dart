@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:wisspr_app/resources/local_storage.dart';
@@ -29,6 +30,22 @@ class SplashProvider with ChangeNotifier {
   double get titleProgress => _titleProgress;
   double get taglineProgress => _taglineProgress;
   double get versionProgress => _versionProgress;
+  final AudioPlayer _player = AudioPlayer()..setReleaseMode(ReleaseMode.stop);
+  bool _played = false;
+
+  /// Method used to play audio.
+  Future<void> playStartupTone() async {
+    if (_played) return;
+    _played = true;
+    try {
+      debugPrint("-----> Audio Playing...");
+      await _player.setVolume(0.4);
+      await _player.play(AssetSource('assets/audio/start_up_tone.mp3'));
+      debugPrint("-----> Audio done.");
+    } catch (e) {
+      debugPrint('Startup tone failed:------> $e');
+    }
+  }
 
 
   /// Initialize splash animations
@@ -36,6 +53,7 @@ class SplashProvider with ChangeNotifier {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _startStaggeredAnimations();
       _startNavigationTimer();
+      playStartupTone();
     });
   }
 
@@ -140,20 +158,9 @@ class SplashProvider with ChangeNotifier {
     }
   }
 
-  /// Reset splash state (useful for testing)
-  void reset() {
-    _isLogoVisible = false;
-    _isTitleVisible = false;
-    _isTaglineVisible = false;
-    _isVersionVisible = false;
-    
-    _logoProgress = 0.0;
-    _titleProgress = 0.0;
-    _taglineProgress = 0.0;
-    _versionProgress = 0.0;
-    
-    _isNavigating = false;
-    _navigationDestination = '';
-    _safeNotifyListeners();
+  @override
+  void dispose() {
+    _player.dispose();
+    super.dispose();
   }
 }

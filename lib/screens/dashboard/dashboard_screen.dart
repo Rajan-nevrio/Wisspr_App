@@ -22,8 +22,6 @@ class BottomNavigationScreen extends StatefulWidget {
 
 class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
   late ResponsiveDimensions r;
-  
-  // Cache screen instances for better performance
   late final List<Widget> _screens;
 
   @override
@@ -31,7 +29,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
     super.initState();
     r = ResponsiveDimensions();
     
-    // Initialize all screens once for caching
+    /// Initialize all screens once for caching
     _screens = [
       const HomeScreen(),
       const MyDeviceScreen(),

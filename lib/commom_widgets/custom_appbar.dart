@@ -9,6 +9,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
   final List<Widget>? actions;
   final bool centerTitle;
+  final bool? isBackBtn;
 
   const CustomAppBar({
     super.key,
@@ -16,6 +17,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.dimension,
     this.title,
     this.actions,
+    this.isBackBtn,
     this.centerTitle = true,
   });
 
@@ -41,11 +43,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         child: Row(
           children: [
             /// Back button (optional if centerTitle = false).
-            if (!centerTitle)
-              IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: () => Navigator.pop(context),
-              ),
+            isBackBtn ?? false
+                ? backBtn()
+                : spaceFiller(),
 
             /// Title
             Expanded(
@@ -59,8 +59,42 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
 
             /// Actions
-            if (actions != null) ...actions!,
+            if (actions == null || actions!.isEmpty)
+              spaceFiller()
+            else
+              ...actions!,
           ],
+        ),
+      ),
+    );
+  }
+
+  /// Widget to fill empty space.
+  Widget spaceFiller() {
+    return SizedBox(
+      height: dimension.height(42),
+      width: dimension.width(42),
+    );
+  }
+
+  /// Widget used for the back button.
+  Widget backBtn() {
+    return GestureDetector(
+      onTap: () => Navigator.pop(context),
+      child: Container(
+        height: dimension.height(42),
+        width: dimension.width(42),
+        margin: EdgeInsets.only(left: dimension.width(12)),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          color: Theme.of(context).colorScheme.surface,
+        ),
+        child: Center(
+          child: Icon(
+            Icons.arrow_back_ios,
+            color: Theme.of(context).colorScheme.tertiary,
+            size: dimension.fontSize(22),
+          ),
         ),
       ),
     );
