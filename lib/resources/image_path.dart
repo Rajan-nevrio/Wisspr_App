@@ -21,6 +21,11 @@ class ImgPath{
   static String logout = "assets/image/profile_screen_icon/logout.png";
   static String deleteAccount = "assets/image/profile_screen_icon/delete_account.png";
 
+  /// Dashboard > Profile Screen > Order History images path.
+  static String calender = "assets/image/sub_profile/calender.png";
+  static String box = "assets/image/sub_profile/box.png";
+  static String msg = "assets/image/sub_profile/msg.png";
+
   /// Common images path.
   static String current = "assets/image/common_images/current.png";
   static String drop = "assets/image/common_images/drop.png";

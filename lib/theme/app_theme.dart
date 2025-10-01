@@ -6,6 +6,7 @@ class AppTheme {
   static const Color _blackLight = Color(0xFF2A2A2A);
   static const Color _mediumBlack = Color(0xFF4D4C49);
   static const Color _lightBlack = Color(0xFF2C2C2C);
+  static const Color _lighterBlack = Color(0xFF262625);
   static const Color _grey = Color(0xFF999793);
   static const Color _red = Color(0xFFE52E2E);
   static const Color _darkGold = Color(0xFFCC9F29);
@@ -22,6 +23,7 @@ class AppTheme {
     colorScheme: const ColorScheme.light(
       surface: _lightBlack,
       surfaceContainer: _mediumBlack,
+      surfaceTint: _lighterBlack,
       primary: _white,
       secondary: _lightGrey,
       tertiary: _grey,

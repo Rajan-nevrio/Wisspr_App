@@ -10,6 +10,9 @@ import '../screens/auth/sign_in_screen.dart';
 import '../screens/dashboard/dashboard_screen.dart';
 import '../screens/sub_profile/notification_setting_screen.dart';
 import '../screens/sub_profile/setting_screen.dart';
+import '../screens/sub_profile/order_history_screen.dart';
+import '../screens/sub_profile/subscription_screen.dart';
+import '../screens/sub_profile/your_payment_screen.dart';
 
 class AppRoutes {
   AppRoutes._();
@@ -22,6 +25,9 @@ class AppRoutes {
   static const String myAccount = '/myAccount';
   static const String settingScreen = '/settingScreen';
   static const String notificationSettingScreen = '/notificationSettingScreen';
+  static const String yourPaymentScreen = '/yourPaymentScreen';
+  static const String subscriptionScreen = '/subscriptionScreen';
+  static const String myOrderScreen = '/myOrderScreen';
 
   /// Generate routes for the app
   static Map<String, WidgetBuilder> get routes => {
@@ -31,6 +37,9 @@ class AppRoutes {
     myAccount: (context) => const MyAccountScreen(),
     settingScreen: (context) => const SettingScreen(),
     notificationSettingScreen: (context) => const NotificationSettingScreen(),
+    myOrderScreen: (context) => const OrderHistoryScreen(),
+    subscriptionScreen: (context) => const SubscriptionScreen(),
+    yourPaymentScreen: (context) => const YourPaymentScreen(),
   };
 
   /// Generate routes with arguments support
@@ -75,6 +84,24 @@ class AppRoutes {
       case notificationSettingScreen:
         return MaterialPageRoute(
           builder: (context) => const NotificationSettingScreen(),
+          settings: settings,
+        );
+
+      case myOrderScreen:
+        return MaterialPageRoute(
+          builder: (context) => const OrderHistoryScreen(),
+          settings: settings,
+        );
+
+      case subscriptionScreen:
+        return MaterialPageRoute(
+          builder: (context) => const SubscriptionScreen(),
+          settings: settings,
+        );
+
+      case yourPaymentScreen:
+        return MaterialPageRoute(
+          builder: (context) => const YourPaymentScreen(),
           settings: settings,
         );
 

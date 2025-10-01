@@ -75,6 +75,24 @@ class AppStrings {
   static String orderConfirmation = "Order Confirmation";
   static String orderTracking = "Order Tracking";
 
+  /// My Order/Order history Screen strings.
+  static String orderHistory = "Order History";
+  static String viewMore = "View more";
+
+  /// Your Order Screen strings.
+  static String yourPayment = "Your Payment";
+
+  /// Your Subscription Screen strings.
+  static String subscription = "Subscription";
+  static String wissprPrime = "Wisspr Prime";
+  static String useThisPromoCodeToGetaFreeDryCleanClickHereForMoreDetails = "Use this promo code to get a free dry clean. Click here for more details";
+  static String upgrade = "Upgrade";
+  static String features = "Features";
+  static String currentPlan = "Current plan";
+  static String wissprLite = "Wisspr Lite";
+  static String subscriptionHistory = "Subscription History";
+  static String cancelSubscription = "Cancel Subscription";
+
   /// Common Strings
   static String cancel = "Cancel";
 }

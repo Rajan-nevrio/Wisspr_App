@@ -47,13 +47,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
         image: ImgPath.subscriptionBilling,
         label: AppStrings.subscriptionBilling,
         icon: Icons.arrow_forward_ios,
-        onPressed: () {},
+        onPressed: () => NavigationHelper.goToSubscriptionScreen(context),
       ),
       TileItem(
         image: ImgPath.yourOrder,
         label: AppStrings.yourOrder,
         icon: Icons.arrow_forward_ios,
-        onPressed: () {},
+        onPressed: () => NavigationHelper.goToMyOrderScreen(context),
       ),
       TileItem(
         image: ImgPath.setting,
@@ -123,7 +123,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         dimension: _responsive,
         context: context,
         title: AppStrings.profile,
-        centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Column(

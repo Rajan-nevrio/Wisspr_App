@@ -34,9 +34,24 @@ class NavigationHelper {
     return AppRoutes.push(context, AppRoutes.settingScreen);
   }
 
-  /// Navigate to setting screen
+  /// Navigate to Notification setting screen
   static Future<T?> goToNotificationSetting<T extends Object?>(BuildContext context) {
     return AppRoutes.push(context, AppRoutes.notificationSettingScreen);
+  }
+
+  /// Navigate to Your Payment screen
+  static Future<T?> goToMyOrderScreen<T extends Object?>(BuildContext context) {
+    return AppRoutes.push(context, AppRoutes.myOrderScreen);
+  }
+
+  /// Navigate to Your Payment screen
+  static Future<T?> goToSubscriptionScreen<T extends Object?>(BuildContext context) {
+    return AppRoutes.push(context, AppRoutes.subscriptionScreen);
+  }
+
+  /// Navigate to Your Payment screen
+  static Future<T?> goToYourPaymentScreen<T extends Object?>(BuildContext context) {
+    return AppRoutes.push(context, AppRoutes.yourPaymentScreen);
   }
 
   /// Navigate to sign-in screen and remove all previous routes

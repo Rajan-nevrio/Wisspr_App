@@ -40,7 +40,6 @@ class _ShopScreenState extends State<ShopScreen> {
         context: context,
         dimension: _responsive,
         title: AppStrings.shop,
-        centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Column(

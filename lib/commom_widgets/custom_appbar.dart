@@ -8,7 +8,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final BuildContext context;
   final String? title;
   final List<Widget>? actions;
-  final bool centerTitle;
   final bool? isBackBtn;
 
   const CustomAppBar({
@@ -18,7 +17,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.title,
     this.actions,
     this.isBackBtn,
-    this.centerTitle = true,
   });
 
   @override
@@ -51,7 +49,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             Expanded(
               child: MText(
                 msg: title ?? "",
-                textAlign: centerTitle ? TextAlign.center : TextAlign.start,
+                textAlign: TextAlign.center,
                 textSize: r.fontSize(20),
                 textWeight: FontWeight.w500,
                 textColor: Theme.of(context).colorScheme.primary,

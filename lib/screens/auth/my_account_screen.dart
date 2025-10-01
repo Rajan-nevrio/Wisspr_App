@@ -38,7 +38,6 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
         dimension: _responsive,
         context: context,
         title: AppStrings.myAccount,
-        centerTitle: true,
         isBackBtn: true,
         actions: [
           Selector<MyAccountProvider, bool>(
