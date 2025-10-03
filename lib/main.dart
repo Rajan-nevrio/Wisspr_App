@@ -13,15 +13,20 @@ import 'utils/shared_preferences_helper.dart';
 import 'utils/performance_helper.dart';
 import 'routes/app_routes.dart';
 import 'providers/auth/intro_provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 String appVersion = "Version 1.0";
-String serverBaseUrl = "staging";
+String serverBaseUrl = "https://wisspr.nevrio.tech/api";
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   debugPrintRebuildDirtyWidgets = false;
   await SharedPreferencesHelper.init();
   PerformanceHelper.startMonitoring();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 

@@ -40,7 +40,7 @@ class SplashProvider with ChangeNotifier {
     try {
       debugPrint("-----> Audio Playing...");
       await _player.setVolume(0.4);
-      await _player.play(AssetSource('assets/audio/start_up_tone.mp3'));
+      await _player.play(AssetSource("assets/audio/start_up_tone.mp3"));
       debugPrint("-----> Audio done.");
     } catch (e) {
       debugPrint('Startup tone failed:------> $e');

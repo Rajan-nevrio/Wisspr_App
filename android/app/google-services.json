@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "911530643581",
+    "project_id": "wisppr-demo",
+    "storage_bucket": "wisppr-demo.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:911530643581:android:15e14b214855a1cffde114",
+        "android_client_info": {
+          "package_name": "com.nevrio.wisspr.demo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "911530643581-obue9sqajl2389q6m8e4ojve0i8ui4i4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nevrio.wisspr.demo",
+            "certificate_hash": "088f58ee75852972c6c3c58c9febdcc326dc09b5"
+          }
+        },
+        {
+          "client_id": "911530643581-mfkuigpn597v93t2bhaa5ksvbeba2opi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBfAnpvoO8uWdZhDpMQrjhClesP2nd1XW8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "911530643581-mfkuigpn597v93t2bhaa5ksvbeba2opi.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "911530643581-kc820qbou15jev7bhv7ac8r5su9a0h86.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.nevrio.wisspr.demo"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

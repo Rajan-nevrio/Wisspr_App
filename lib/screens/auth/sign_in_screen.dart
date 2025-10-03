@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wisspr_app/commom_widgets/customer_text/marcellus_font_type_text.dart';
@@ -8,6 +9,7 @@ import '../../providers/auth/sign_in_provider.dart';
 import '../../resources/app_strings.dart';
 import '../../resources/font_constants.dart';
 import '../../resources/image_path.dart';
+import '../../routes/navigation_helper.dart';
 import '../../utils/responsive_dimensions.dart';
 import '../../utils/performance_helper.dart';
 
@@ -133,9 +135,13 @@ class _SignInScreenState extends State<SignInScreen> {
       child: ElevatedButton(
         onPressed: isLoading
             ? () => debugPrint("Google login:-----> Already running")
-            : () {
+            : () async {
                 final provider = Provider.of<SignUpProvider>(context, listen: false);
-                provider.handleGoogleLogin(context);
+                final User? user = await provider.handleGoogleLogin();
+                if (user != null) {
+
+                  NavigationHelper.goToHome(context);
+                }
               },
         style: ElevatedButton.styleFrom(
           backgroundColor: Theme.of(context).colorScheme.surface,
