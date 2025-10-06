@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:wisspr_app/resources/local_storage.dart';
 
+import '../../resources/audio_path.dart';
+
 class SplashProvider with ChangeNotifier {
   LocalStorage storage = LocalStorage();
   bool _isLogoVisible = false;
@@ -38,10 +40,7 @@ class SplashProvider with ChangeNotifier {
     if (_played) return;
     _played = true;
     try {
-      debugPrint("-----> Audio Playing...");
-      await _player.setVolume(0.4);
-      await _player.play(AssetSource("assets/audio/start_up_tone.mp3"));
-      debugPrint("-----> Audio done.");
+      await _player.play(AssetSource(AudioPath.startUpTone));
     } catch (e) {
       debugPrint('Startup tone failed:------> $e');
     }
@@ -118,7 +117,7 @@ class SplashProvider with ChangeNotifier {
   /// Check access token and navigate accordingly
   Future<void> _checkAccessTokenAndNavigate() async {
     try {
-      final token = await storage.getAccessToken();
+      final token = await storage.getGoogleAccessToken();
       debugPrint('Access token check:------> ${token.isNotEmpty ? "Found" : "Not found"}');
       
       if (token.isNotEmpty) {

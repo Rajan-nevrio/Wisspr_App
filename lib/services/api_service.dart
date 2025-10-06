@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:async';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import '../resources/local_storage.dart';
 
 /// Custom exception classes for API errors
 class ApiException implements Exception {
@@ -25,11 +27,12 @@ class ServerException extends ApiException {
 
 class TimeoutException extends ApiException {
   final Duration? timeoutDuration;
-  
+
   TimeoutException(super.message, {this.timeoutDuration});
-  
+
   @override
-  String toString() => 'TimeoutException: $message${timeoutDuration != null ? ' (Timeout: ${timeoutDuration!.inSeconds}s)' : ''}';
+  String toString() =>
+      'TimeoutException: $message${timeoutDuration != null ? ' (Timeout: ${timeoutDuration!.inSeconds}s)' : ''}';
 }
 
 class UnauthorizedException extends ApiException {
@@ -54,43 +57,47 @@ class ApiService {
   static const String _contentType = 'application/json';
   static const String _acceptHeader = 'application/json';
 
-  final String baseUrl;
   final Duration timeout;
   final Map<String, String> defaultHeaders;
+  final LocalStorage _localStorage = LocalStorage();
 
   ApiService({
-    required this.baseUrl,
     this.timeout = _defaultTimeout,
     Map<String, String>? defaultHeaders,
   }) : defaultHeaders = {
-          'Content-Type': _contentType,
-          'Accept': _acceptHeader,
-          ...?defaultHeaders,
-        };
+         'Content-Type': _contentType,
+         'Accept': _acceptHeader,
+         ...?defaultHeaders,
+       };
 
   /// GET request with exception handling
   Future<Map<String, dynamic>> get(
-    String endpoint, {
+    String apiUrl, {
     Map<String, String>? queryParameters,
     Map<String, String>? headers,
     bool parseJson = true,
   }) async {
     try {
-      final uri = _buildUri(endpoint, queryParameters);
-      final requestHeaders = _buildHeaders(headers);
+      final uri = _buildUri(apiUrl, queryParameters);
+      final requestHeaders = await _buildHeaders(headers);
 
       final response = await http
           .get(uri, headers: requestHeaders)
-          .timeout(timeout, onTimeout: () {
-            throw TimeoutException(
-              'GET request to $endpoint timed out after ${timeout.inSeconds} seconds',
-              timeoutDuration: timeout,
-            );
-          });
+          .timeout(
+            timeout,
+            onTimeout: () {
+              throw TimeoutException(
+                'GET request to $apiUrl timed out after ${timeout.inSeconds} seconds',
+                timeoutDuration: timeout,
+              );
+            },
+          );
 
       return _handleResponse(response, parseJson: parseJson);
     } on SocketException {
-      throw NetworkException('No internet connection. Please check your network settings.');
+      throw NetworkException(
+        'No internet connection. Please check your network settings.',
+      );
     } on HttpException catch (e) {
       throw NetworkException('HTTP error occurred: ${e.message}');
     } on FormatException catch (e) {
@@ -102,35 +109,40 @@ class ApiService {
 
   /// POST request with exception handling
   Future<Map<String, dynamic>> post(
-    String endpoint, {
+    String apiUrl, {
     Map<String, dynamic>? body,
     Map<String, String>? queryParameters,
     Map<String, String>? headers,
     bool parseJson = true,
   }) async {
     try {
-      final uri = _buildUri(endpoint, queryParameters);
-      final requestHeaders = _buildHeaders(headers);
+      final uri = _buildUri(apiUrl, queryParameters);
+      final requestHeaders = await _buildHeaders(headers);
       final requestBody = body != null ? jsonEncode(body) : null;
 
       final response = await http
           .post(uri, headers: requestHeaders, body: requestBody)
-          .timeout(timeout, onTimeout: () {
-            throw TimeoutException(
-              'POST request to $endpoint timed out after ${timeout.inSeconds} seconds',
-              timeoutDuration: timeout,
-            );
-          });
+          .timeout(
+            timeout,
+            onTimeout: () {
+              throw TimeoutException(
+                'POST request to $apiUrl timed out after ${timeout.inSeconds} seconds',
+                timeoutDuration: timeout,
+              );
+            },
+          );
 
       return _handleResponse(response, parseJson: parseJson);
     } on SocketException {
-      throw NetworkException('No internet connection. Please check your network settings.');
+      throw NetworkException(
+        'No internet connection. Please check your network settings.',
+      );
     } on HttpException catch (e) {
       throw NetworkException('HTTP error occurred: ${e.message}');
     } on FormatException catch (e) {
       throw ApiException('Invalid response format: ${e.message}');
     } on TimeoutException {
-      rethrow; // Re-throw our custom timeout exception
+      rethrow;
     }
   }
 
@@ -143,26 +155,31 @@ class ApiService {
   }) async {
     try {
       final uri = _buildUri(endpoint, queryParameters);
-      final requestHeaders = _buildHeaders(headers);
+      final requestHeaders = await _buildHeaders(headers);
 
       final response = await http
           .delete(uri, headers: requestHeaders)
-          .timeout(timeout, onTimeout: () {
-            throw TimeoutException(
-              'DELETE request to $endpoint timed out after ${timeout.inSeconds} seconds',
-              timeoutDuration: timeout,
-            );
-          });
+          .timeout(
+            timeout,
+            onTimeout: () {
+              throw TimeoutException(
+                'DELETE request to $endpoint timed out after ${timeout.inSeconds} seconds',
+                timeoutDuration: timeout,
+              );
+            },
+          );
 
       return _handleResponse(response, parseJson: parseJson);
     } on SocketException {
-      throw NetworkException('No internet connection. Please check your network settings.');
+      throw NetworkException(
+        'No internet connection. Please check your network settings.',
+      );
     } on HttpException catch (e) {
       throw NetworkException('HTTP error occurred: ${e.message}');
     } on FormatException catch (e) {
       throw ApiException('Invalid response format: ${e.message}');
     } on TimeoutException {
-      rethrow; // Re-throw our custom timeout exception
+      rethrow;
     }
   }
 
@@ -176,27 +193,32 @@ class ApiService {
   }) async {
     try {
       final uri = _buildUri(endpoint, queryParameters);
-      final requestHeaders = _buildHeaders(headers);
+      final requestHeaders = await _buildHeaders(headers);
       final requestBody = body != null ? jsonEncode(body) : null;
 
       final response = await http
           .put(uri, headers: requestHeaders, body: requestBody)
-          .timeout(timeout, onTimeout: () {
-            throw TimeoutException(
-              'PUT request to $endpoint timed out after ${timeout.inSeconds} seconds',
-              timeoutDuration: timeout,
-            );
-          });
+          .timeout(
+            timeout,
+            onTimeout: () {
+              throw TimeoutException(
+                'PUT request to $endpoint timed out after ${timeout.inSeconds} seconds',
+                timeoutDuration: timeout,
+              );
+            },
+          );
 
       return _handleResponse(response, parseJson: parseJson);
     } on SocketException {
-      throw NetworkException('No internet connection. Please check your network settings.');
+      throw NetworkException(
+        'No internet connection. Please check your network settings.',
+      );
     } on HttpException catch (e) {
       throw NetworkException('HTTP error occurred: ${e.message}');
     } on FormatException catch (e) {
       throw ApiException('Invalid response format: ${e.message}');
     } on TimeoutException {
-      rethrow; // Re-throw our custom timeout exception
+      rethrow;
     }
   }
 
@@ -210,53 +232,67 @@ class ApiService {
   }) async {
     try {
       final uri = _buildUri(endpoint, queryParameters);
-      final requestHeaders = _buildHeaders(headers);
+      final requestHeaders = await _buildHeaders(headers);
       final requestBody = body != null ? jsonEncode(body) : null;
 
       final response = await http
           .patch(uri, headers: requestHeaders, body: requestBody)
-          .timeout(timeout, onTimeout: () {
-            throw TimeoutException(
-              'PATCH request to $endpoint timed out after ${timeout.inSeconds} seconds',
-              timeoutDuration: timeout,
-            );
-          });
+          .timeout(
+            timeout,
+            onTimeout: () {
+              throw TimeoutException(
+                'PATCH request to $endpoint timed out after ${timeout.inSeconds} seconds',
+                timeoutDuration: timeout,
+              );
+            },
+          );
 
       return _handleResponse(response, parseJson: parseJson);
     } on SocketException {
-      throw NetworkException('No internet connection. Please check your network settings.');
+      throw NetworkException(
+        'No internet connection. Please check your network settings.',
+      );
     } on HttpException catch (e) {
       throw NetworkException('HTTP error occurred: ${e.message}');
     } on FormatException catch (e) {
       throw ApiException('Invalid response format: ${e.message}');
     } on TimeoutException {
-      rethrow; // Re-throw our custom timeout exception
+      rethrow;
     }
   }
 
-  /// Build headers with proper Bearer token formatting
-  Map<String, String> _buildHeaders(Map<String, String>? additionalHeaders) {
+  /// Build headers with proper Bearer token formatting and automatic token injection
+  Future<Map<String, String>> _buildHeaders(
+    Map<String, String>? additionalHeaders,
+  ) async {
     final headers = <String, String>{...defaultHeaders};
-    
-    // Ensure Bearer token is properly formatted
+
+    try {
+      final token = await _localStorage.getGoogleAccessToken();
+      if (token.isNotEmpty) {
+        headers['Authorization'] = 'Bearer $token';
+      }
+    } catch (e) {
+      debugPrint('Failed to get access token:-----> $e');
+    }
+
     if (headers.containsKey('Authorization')) {
       final authValue = headers['Authorization']!;
       if (!authValue.startsWith('Bearer ')) {
         headers['Authorization'] = 'Bearer ${authValue.replaceFirst('Bearer ', '')}';
       }
     }
-    
-    // Add any additional headers
+
     if (additionalHeaders != null) {
       headers.addAll(additionalHeaders);
     }
-    
+
     return headers;
   }
 
   /// Build URI with query parameters
-  Uri _buildUri(String endpoint, Map<String, String>? queryParameters) {
-    final uri = Uri.parse('$baseUrl$endpoint');
+  Uri _buildUri(String url, Map<String, String>? queryParameters) {
+    final uri = Uri.parse(url);
     if (queryParameters != null && queryParameters.isNotEmpty) {
       return uri.replace(queryParameters: queryParameters);
     }
@@ -270,7 +306,6 @@ class ApiService {
   }) {
     final statusCode = response.statusCode;
 
-    // Handle different status codes
     switch (statusCode) {
       case 200:
       case 201:
@@ -280,7 +315,9 @@ class ApiService {
       case 401:
         throw UnauthorizedException('Unauthorized: Please login again');
       case 403:
-        throw ForbiddenException('Forbidden: You do not have permission to access this resource');
+        throw ForbiddenException(
+          'Forbidden: You do not have permission to access this resource',
+        );
       case 404:
         throw NotFoundException('Resource not found');
       case 422:
@@ -295,11 +332,20 @@ class ApiService {
         throw ServerException('Gateway timeout', statusCode: statusCode);
       default:
         if (statusCode >= 400 && statusCode < 500) {
-          throw ApiException('Client error: ${response.body}', statusCode: statusCode);
+          throw ApiException(
+            'Client error: ${response.body}',
+            statusCode: statusCode,
+          );
         } else if (statusCode >= 500) {
-          throw ServerException('Server error: ${response.body}', statusCode: statusCode);
+          throw ServerException(
+            'Server error: ${response.body}',
+            statusCode: statusCode,
+          );
         } else {
-          throw ApiException('Unexpected status code: $statusCode', statusCode: statusCode);
+          throw ApiException(
+            'Unexpected status code: $statusCode',
+            statusCode: statusCode,
+          );
         }
     }
   }
@@ -317,80 +363,6 @@ class ApiService {
       return jsonDecode(response.body) as Map<String, dynamic>;
     } catch (e) {
       throw ApiException('Failed to parse JSON response: $e');
-    }
-  }
-
-  /// Add authentication token to headers with proper Bearer formatting
-  void setAuthToken(String token) {
-    // Remove any existing "Bearer " prefix to avoid duplication
-    final cleanToken = token.startsWith('Bearer ') 
-        ? token.substring(7) 
-        : token;
-    defaultHeaders['Authorization'] = 'Bearer $cleanToken';
-  }
-
-  /// Remove authentication token from headers
-  void clearAuthToken() {
-    defaultHeaders.remove('Authorization');
-  }
-
-  /// Add custom header
-  void addHeader(String key, String value) {
-    defaultHeaders[key] = value;
-  }
-
-  /// Remove custom header
-  void removeHeader(String key) {
-    defaultHeaders.remove(key);
-  }
-
-  /// Get current timeout duration
-  Duration get currentTimeout => timeout;
-
-  /// Check if authentication token is set
-  bool get hasAuthToken => defaultHeaders.containsKey('Authorization');
-
-  /// Get current authentication token (without Bearer prefix)
-  String? get authToken {
-    final authHeader = defaultHeaders['Authorization'];
-    if (authHeader != null && authHeader.startsWith('Bearer ')) {
-      return authHeader.substring(7);
-    }
-    return authHeader;
-  }
-
-  /// Make a request with custom timeout
-  Future<Map<String, dynamic>> getWithCustomTimeout(
-    String endpoint, {
-    Duration? customTimeout,
-    Map<String, String>? queryParameters,
-    Map<String, String>? headers,
-    bool parseJson = true,
-  }) async {
-    final effectiveTimeout = customTimeout ?? timeout;
-    
-    try {
-      final uri = _buildUri(endpoint, queryParameters);
-      final requestHeaders = _buildHeaders(headers);
-
-      final response = await http
-          .get(uri, headers: requestHeaders)
-          .timeout(effectiveTimeout, onTimeout: () {
-            throw TimeoutException(
-              'GET request to $endpoint timed out after ${effectiveTimeout.inSeconds} seconds',
-              timeoutDuration: effectiveTimeout,
-            );
-          });
-
-      return _handleResponse(response, parseJson: parseJson);
-    } on SocketException {
-      throw NetworkException('No internet connection. Please check your network settings.');
-    } on HttpException catch (e) {
-      throw NetworkException('HTTP error occurred: ${e.message}');
-    } on FormatException catch (e) {
-      throw ApiException('Invalid response format: ${e.message}');
-    } on TimeoutException {
-      rethrow;
     }
   }
 }

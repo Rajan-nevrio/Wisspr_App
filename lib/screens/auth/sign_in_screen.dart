@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wisspr_app/commom_widgets/customer_text/marcellus_font_type_text.dart';
@@ -137,10 +136,20 @@ class _SignInScreenState extends State<SignInScreen> {
             ? () => debugPrint("Google login:-----> Already running")
             : () async {
                 final provider = Provider.of<SignUpProvider>(context, listen: false);
-                final User? user = await provider.handleGoogleLogin();
-                if (user != null) {
-
-                  NavigationHelper.goToHome(context);
+                final result = await provider.handleGoogleLogin(context);
+                if (result != null && result['success'] == true) {
+                  if (context.mounted) {
+                    NavigationHelper.goToHome(context);
+                  }
+                } else {
+                  if (mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Google login failed. Please try again.'),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  }
                 }
               },
         style: ElevatedButton.styleFrom(

@@ -7,6 +7,8 @@ import '../../../commom_widgets/my_device_card.dart';
 import '../../../commom_widgets/product_banner.dart';
 import '../../../commom_widgets/purchase_banner.dart';
 import '../../../commom_widgets/video_card.dart';
+import 'package:provider/provider.dart';
+import '../../../providers/dashboard/botton_navigation_providers/home_provider.dart';
 import '../../../resources/app_strings.dart';
 import '../../../utils/responsive_dimensions.dart';
 
@@ -36,6 +38,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final homeProvider = context.read<HomeProvider>();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      homeProvider.getVideoMethod();
+      homeProvider.getBannerMethod();
+    });
+
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: CustomAppBar(

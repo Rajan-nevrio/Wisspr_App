@@ -4,6 +4,7 @@ import 'package:wisspr_app/providers/auth/sign_in_provider.dart';
 import 'package:wisspr_app/providers/auth/splash_provider.dart';
 import 'package:wisspr_app/providers/auth/my_account_provider.dart';
 import 'package:wisspr_app/providers/dashboard/dashboard_provider.dart';
+import 'package:wisspr_app/providers/dashboard/botton_navigation_providers/home_provider.dart';
 import 'package:wisspr_app/providers/dashboard/botton_navigation_providers/profile_provider.dart';
 import 'package:wisspr_app/providers/sub_profile/notification_setting_provider.dart';
 import 'package:wisspr_app/resources/app_strings.dart';
@@ -44,6 +45,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ProfileProvider()),
         ChangeNotifierProvider(create: (_) => NotificationSettingProvider()),
         ChangeNotifierProvider(create: (_) => DashBoardProvider()),
+        ChangeNotifierProvider(create: (_) => HomeProvider()),
       ],
       child: MaterialApp(
         theme: AppTheme.whiteTheme,
