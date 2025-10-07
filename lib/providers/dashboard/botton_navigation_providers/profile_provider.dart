@@ -17,7 +17,7 @@ class ProfileProvider with ChangeNotifier {
     _isLogoutLoading = true;
     notifyListeners();
     try {
-      await _storage.removeGoogleAccessToken();
+      await _storage.removeAccessToken();
       if (context.mounted) {
         NavigationHelper.logout(context);
       }
@@ -35,7 +35,7 @@ class ProfileProvider with ChangeNotifier {
     _isDeleteLoading = true;
     notifyListeners();
     try {
-      await _storage.removeGoogleAccessToken();
+      await _storage.removeAccessToken();
       if (context.mounted) {
         NavigationHelper.logout(context);
       }

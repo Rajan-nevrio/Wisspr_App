@@ -268,7 +268,7 @@ class ApiService {
     final headers = <String, String>{...defaultHeaders};
 
     try {
-      final token = await _localStorage.getGoogleAccessToken();
+      final token = await _localStorage.getAccessToken();
       if (token.isNotEmpty) {
         headers['Authorization'] = 'Bearer $token';
       }

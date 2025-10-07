@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:wisspr_app/common_methods/print_methods.dart';
+import 'package:wisspr_app/common_methods/common_methods.dart';
 import 'package:wisspr_app/services/api_service.dart';
 import 'package:wisspr_app/services/api_url.dart';
 

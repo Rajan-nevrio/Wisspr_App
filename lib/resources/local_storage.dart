@@ -3,39 +3,55 @@ import '../utils/shared_preferences_helper.dart';
 class LocalStorage{
 
   /// Method used to save user access token.
-  Future<void> saveGoogleAccessToken(String token) async {
-    await SharedPreferencesHelper.saveString(StorageKey.googleAccessToken, token);
+  Future<void> saveAccessToken(String token) async {
+    await SharedPreferencesHelper.saveString(StorageKey.accessToken, token);
   }
 
   /// Method used to get user access token.
-  Future<String> getGoogleAccessToken() async {
-    return await SharedPreferencesHelper.getString(StorageKey.googleAccessToken) ?? "";
+  Future<String> getAccessToken() async {
+    return await SharedPreferencesHelper.getString(StorageKey.accessToken) ?? "";
   }
 
   /// Method used to remove user access token.
-  Future<void> removeGoogleAccessToken() async {
-    await SharedPreferencesHelper.removeString(StorageKey.googleAccessToken);
+  Future<void> removeAccessToken() async {
+    await SharedPreferencesHelper.removeString(StorageKey.accessToken);
   }
 
-  /// Method used to save Google ID token.
-  Future<void> saveGoogleIdToken(String token) async {
-    await SharedPreferencesHelper.saveString(StorageKey.googleIdToken, token);
+  /// Method used to save user name.
+  Future<void> saveUserName(String token) async {
+    await SharedPreferencesHelper.saveString(StorageKey.userName, token);
   }
 
-  /// Method used to get Google ID token.
-  Future<String> getGoogleIdToken() async {
-    return await SharedPreferencesHelper.getString(StorageKey.googleIdToken) ?? "";
+  /// Method used to get user name.
+  Future<String> getUserName() async {
+    return await SharedPreferencesHelper.getString(StorageKey.userName) ?? "";
   }
 
-  /// Method used to remove Google ID token.
-  Future<void> removeGoogleIdToken() async {
-    await SharedPreferencesHelper.removeString(StorageKey.googleIdToken);
+  /// Method used to remove user name.
+  Future<void> removeUserName() async {
+    await SharedPreferencesHelper.removeString(StorageKey.userName);
+  }
+
+  /// Method used to save user name.
+  Future<void> saveUserEmail(String token) async {
+    await SharedPreferencesHelper.saveString(StorageKey.userEmail, token);
+  }
+
+  /// Method used to get user name.
+  Future<String> getUserEmail() async {
+    return await SharedPreferencesHelper.getString(StorageKey.userEmail) ?? "";
+  }
+
+  /// Method used to remove user name.
+  Future<void> removeUserEmail() async {
+    await SharedPreferencesHelper.removeString(StorageKey.userEmail);
   }
 
   /// Method used to clear all Google tokens.
-  Future<void> clearGoogleTokens() async {
-    await removeGoogleAccessToken();
-    await removeGoogleIdToken();
+  Future<void> clearAllDetails() async {
+    await removeAccessToken();
+    await removeUserName();
+    await removeUserEmail();
   }
 
   /// Method used to save Apple ID token.
@@ -60,7 +76,8 @@ class LocalStorage{
 }
 
 class StorageKey{
-  static String googleAccessToken = "google_access_token";
-  static String googleIdToken = "google_id_token";
+  static String accessToken = "access_token";
+  static String userName = "user_name";
+  static String userEmail = "user_email";
   static String appleIdToken = "apple_id_token";
 }

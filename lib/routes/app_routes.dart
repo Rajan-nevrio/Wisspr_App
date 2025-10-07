@@ -8,6 +8,7 @@ import '../screens/auth/splash_screen.dart';
 import '../screens/auth/intro_screen.dart';
 import '../screens/auth/sign_in_screen.dart';
 import '../screens/dashboard/dashboard_screen.dart';
+import '../screens/device_pairing/add_device.dart';
 import '../screens/sub_profile/notification_setting_screen.dart';
 import '../screens/sub_profile/setting_screen.dart';
 import '../screens/sub_profile/order_history_screen.dart';
@@ -28,6 +29,7 @@ class AppRoutes {
   static const String yourPaymentScreen = '/yourPaymentScreen';
   static const String subscriptionScreen = '/subscriptionScreen';
   static const String myOrderScreen = '/myOrderScreen';
+  static const String addDeviceScreen = '/addDeviceScreen';
 
   /// Generate routes for the app
   static Map<String, WidgetBuilder> get routes => {
@@ -40,6 +42,7 @@ class AppRoutes {
     myOrderScreen: (context) => const OrderHistoryScreen(),
     subscriptionScreen: (context) => const SubscriptionScreen(),
     yourPaymentScreen: (context) => const YourPaymentScreen(),
+    addDeviceScreen: (context) => const AddDeviceScreen(),
   };
 
   /// Generate routes with arguments support
@@ -102,6 +105,12 @@ class AppRoutes {
       case yourPaymentScreen:
         return MaterialPageRoute(
           builder: (context) => const YourPaymentScreen(),
+          settings: settings,
+        );
+
+      case addDeviceScreen:
+        return MaterialPageRoute(
+          builder: (context) => const AddDeviceScreen(),
           settings: settings,
         );
 

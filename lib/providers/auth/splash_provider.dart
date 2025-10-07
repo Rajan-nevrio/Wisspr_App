@@ -117,7 +117,7 @@ class SplashProvider with ChangeNotifier {
   /// Check access token and navigate accordingly
   Future<void> _checkAccessTokenAndNavigate() async {
     try {
-      final token = await storage.getGoogleAccessToken();
+      final token = await storage.getAccessToken();
       debugPrint('Access token check:------> ${token.isNotEmpty ? "Found" : "Not found"}');
       
       if (token.isNotEmpty) {

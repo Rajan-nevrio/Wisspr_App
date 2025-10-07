@@ -1,7 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:wisspr_app/common_methods/common_methods.dart';
 import 'package:wisspr_app/resources/local_storage.dart';
+import '../../commom_widgets/customer_text/marcellus_font_type_text.dart';
+import '../../response_models/login_model.dart';
 import '../../routes/navigation_helper.dart';
 import '../../services/api_service.dart';
 import '../../services/api_url.dart';
@@ -9,9 +14,11 @@ import '../../services/api_url.dart';
 class SignUpProvider with ChangeNotifier {
   static final ApiService _apiService = ApiService(timeout: const Duration(seconds: 10));
   final GoogleSignIn _googleSignIn = GoogleSignIn(
-    clientId: "911530643581-mfkuigpn597v93t2bhaa5ksvbeba2opi.apps.googleusercontent.com",
+    clientId: "911530643581-obue9sqajl2389q6m8e4ojve0i8ui4i4.apps.googleusercontent.com",
+    serverClientId: "911530643581-mfkuigpn597v93t2bhaa5ksvbeba2opi.apps.googleusercontent.com",
     scopes: <String>['email', 'profile'],
   );
+  CommonMethods commonMethods = CommonMethods();
   LocalStorage storage = LocalStorage();
   String _idToken = "";
   String _accessToken = "";
@@ -32,8 +39,8 @@ class SignUpProvider with ChangeNotifier {
   bool get isLoggedIn => _isLoggedIn;
 
   /// Method used to google login without Firebase.
-  Future<Map<String, dynamic>?> handleGoogleLogin(BuildContext context) async {
-    if(_isGoogleLoader || _isAppleLoader) return null;
+  Future<void> handleGoogleLogin(BuildContext context) async {
+    if(_isGoogleLoader || _isAppleLoader) return;
 
     _isGoogleLoader = true;
     notifyListeners();
@@ -45,7 +52,7 @@ class SignUpProvider with ChangeNotifier {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       if (googleUser == null) {
         debugPrint('------> Google Sign-In cancelled by user');
-        return null;
+        return;
       }
 
       debugPrint('Google Sign-In successful for user:------> ${googleUser.email}');
@@ -56,28 +63,48 @@ class SignUpProvider with ChangeNotifier {
       _userEmail = googleUser.email;
       _userName = googleUser.displayName ?? "";
       _userPhotoUrl = googleUser.photoUrl ?? "";
-
-      await storage.saveGoogleAccessToken(_accessToken);
-      await storage.saveGoogleIdToken(_idToken);
       
       debugPrint('User id token:-----> $_idToken');
       debugPrint('User Access token:-----> $_accessToken');
       debugPrint('User Email:-----> $_userEmail');
       debugPrint('User Name:-----> $_userName');
 
-      final loginResult = await socialLogin(provider: 'google');
+      final LoginModel? loginResult = await socialLogin(provider: 'google');
       
-      if (loginResult != null && loginResult['success'] == true) {
+      if (loginResult != null && loginResult.status == true) {
         _isLoggedIn = true;
-        return loginResult;
+        await storage.saveAccessToken(loginResult.token ?? "");
+        await storage.saveUserName(loginResult.user?.fullName ?? "");
+        await storage.saveUserEmail(loginResult.user?.email ?? "");
+        debugPrint("User Access Token:-----> ${storage.getAccessToken()}");
+
+        if (context.mounted) {
+          NavigationHelper.goToHome(context);
+        }
       } else {
         debugPrint('Backend login failed:-----> $loginResult');
-        return null;
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: MText(
+                msg: 'Google login failed. Please try again.',
+                textColor: Theme.of(context).colorScheme.primary,
+                textWeight:  FontWeight.w400,
+              ),
+              backgroundColor: Theme.of(context).colorScheme.error,
+              behavior: SnackBarBehavior.floating,
+              margin: const EdgeInsets.all(16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              elevation: 6,
+              duration: const Duration(seconds: 3),
+            )
+          );
+        }
       }
-
     } catch (error) {
       debugPrint('Failed to Google login:-----> $error');
-      return null;
     } finally {
       _isGoogleLoader = false;
       notifyListeners();
@@ -106,7 +133,7 @@ class SignUpProvider with ChangeNotifier {
       );
 
       _idToken = credential.identityToken ?? "";
-      _accessToken = ""; // Apple flow here does not yield OAuth access token
+      _accessToken = "";
       _userEmail = credential.email ?? _userEmail;
       final fullName = [
         credential.givenName,
@@ -121,9 +148,9 @@ class SignUpProvider with ChangeNotifier {
 
       await storage.saveAppleIdToken(_idToken);
 
-      final loginResult = await socialLogin(provider: 'apple');
+      LoginModel? loginResult = await socialLogin(provider: 'apple');
 
-      if (loginResult != null && loginResult['success'] == true) {
+      if (loginResult != null && (loginResult.status ?? false)) {
         _isLoggedIn = true;
         if (context.mounted) {
           NavigationHelper.goToHome(context);
@@ -150,7 +177,7 @@ class SignUpProvider with ChangeNotifier {
       _userName = "";
       _userPhotoUrl = "";
       _isLoggedIn = false;
-      await storage.clearGoogleTokens();
+      await storage.clearAllDetails();
       await storage.clearAppleTokens();
       
       notifyListeners();
@@ -162,22 +189,30 @@ class SignUpProvider with ChangeNotifier {
 
 
   /// Method to handle social login with backend API
-  Future<Map<String, dynamic>?> socialLogin({required String provider}) async {
+  Future<LoginModel?> socialLogin({required String provider}) async {
+    LoginModel? response;
+    String printResponse = "";
     Map<String, String> req = {
       "provider": provider,
+      "platform": commonMethods.getPlatform(),
       "id_token": _idToken,
+      "fcm_token": "",
     };
 
     try {
-      var response = await _apiService.post(
+      final json = await _apiService.post(
         ApiUrl.socialLogin,
         body: req,
       );
+      response = LoginModel.fromJson(json);
+      printResponse = jsonEncode(json);
       return response;
 
     } catch (error) {
       debugPrint('Social login API error:-----> $error');
       return null;
+    } finally {
+      commonMethods.printPostResponse(url: ApiUrl.socialLogin, requestBody: req, response: printResponse);
     }
   }
 }

@@ -8,7 +8,6 @@ import '../../providers/auth/sign_in_provider.dart';
 import '../../resources/app_strings.dart';
 import '../../resources/font_constants.dart';
 import '../../resources/image_path.dart';
-import '../../routes/navigation_helper.dart';
 import '../../utils/responsive_dimensions.dart';
 import '../../utils/performance_helper.dart';
 
@@ -40,7 +39,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 VerticalSpacing(height: 60),
                 description(r),
                 VerticalSpacing(height: 30),
-                
+
                 /// Google button with Selector - only rebuilds when isGoogleLoader changes
                 Selector<SignUpProvider, bool>(
                   selector: (context, provider) => provider.isGoogleLoader,
@@ -48,9 +47,9 @@ class _SignInScreenState extends State<SignInScreen> {
                     return googleLoginBtn(isGoogleLoader, r);
                   },
                 ),
-                
+
                 VerticalSpacing(height: 16),
-                
+
                 /// Apple button with Selector - only rebuilds when isAppleLoader changes
                 Selector<SignUpProvider, bool>(
                   selector: (context, provider) => provider.isAppleLoader,
@@ -58,7 +57,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     return appleLoginBtn(isAppleLoader, r);
                   },
                 ),
-                
+
                 VerticalSpacing(height: 80),
                 bottomDescription(r),
               ],
@@ -135,22 +134,11 @@ class _SignInScreenState extends State<SignInScreen> {
         onPressed: isLoading
             ? () => debugPrint("Google login:-----> Already running")
             : () async {
-                final provider = Provider.of<SignUpProvider>(context, listen: false);
-                final result = await provider.handleGoogleLogin(context);
-                if (result != null && result['success'] == true) {
-                  if (context.mounted) {
-                    NavigationHelper.goToHome(context);
-                  }
-                } else {
-                  if (mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Google login failed. Please try again.'),
-                        backgroundColor: Colors.red,
-                      ),
-                    );
-                  }
-                }
+                final provider = Provider.of<SignUpProvider>(
+                  context,
+                  listen: false,
+                );
+                await provider.handleGoogleLogin(context);
               },
         style: ElevatedButton.styleFrom(
           backgroundColor: Theme.of(context).colorScheme.surface,
@@ -210,7 +198,10 @@ class _SignInScreenState extends State<SignInScreen> {
         onPressed: isLoading
             ? () => debugPrint("Apple Login:------> Already running")
             : () {
-                final provider = Provider.of<SignUpProvider>(context, listen: false);
+                final provider = Provider.of<SignUpProvider>(
+                  context,
+                  listen: false,
+                );
                 provider.handleAppleLogin(context);
               },
         style: ElevatedButton.styleFrom(

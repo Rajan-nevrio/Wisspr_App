@@ -54,6 +54,11 @@ class NavigationHelper {
     return AppRoutes.push(context, AppRoutes.yourPaymentScreen);
   }
 
+  /// Navigate to Add Device Screen
+  static Future<T?> goToAddDeviceScreen<T extends Object?>(BuildContext context) {
+    return AppRoutes.push(context, AppRoutes.addDeviceScreen);
+  }
+
   /// Navigate to sign-in screen and remove all previous routes
   static Future<T?> logout<T extends Object?>(BuildContext context) {
     return AppRoutes.pushAndClearStack(context, AppRoutes.signIn);

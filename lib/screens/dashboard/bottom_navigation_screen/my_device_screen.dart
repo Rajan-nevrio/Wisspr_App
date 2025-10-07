@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../commom_widgets/custom_appbar.dart';
 import '../../../commom_widgets/my_device_card.dart';
 import '../../../resources/app_strings.dart';
+import '../../../routes/navigation_helper.dart';
 import '../../../utils/responsive_dimensions.dart';
 
 class MyDeviceScreen extends StatefulWidget {
@@ -43,7 +44,7 @@ class _MyDeviceScreenState extends State<MyDeviceScreen> {
               child: IconButton(
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),
-                onPressed: () {},
+                onPressed: () => NavigationHelper.goToAddDeviceScreen(context),
                 icon: Icon(
                   Icons.add,
                   color: Theme.of(context).scaffoldBackgroundColor,
