@@ -13,7 +13,6 @@ class HomeProvider with ChangeNotifier{
     try {
       reply = await _apiService.get(ApiUrl.getVideo);
       if (reply["status"]) {
-        debugPrint("Get Video:---> $reply");
       } else {
         debugPrint("${reply["msg"]}");
       }
@@ -30,7 +29,6 @@ class HomeProvider with ChangeNotifier{
     try {
       reply = await _apiService.get(ApiUrl.getBanners);
       if (reply["status"]) {
-        debugPrint("Get banner:---> $reply");
       } else {
         debugPrint("${reply["msg"]}");
       }

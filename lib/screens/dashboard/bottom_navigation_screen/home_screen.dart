@@ -79,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
   /// Widget used to show the product banner on top.
   Widget _productBanner() {
     return Container(
-      width: double.infinity,
+      width: r.screenWidth,
       decoration: BoxDecoration(
         color: Theme.of(context).scaffoldBackgroundColor,
       ),

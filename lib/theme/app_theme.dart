@@ -9,6 +9,7 @@ class AppTheme {
   static const Color _lighterBlack = Color(0xFF262625);
   static const Color _grey = Color(0xFF999793);
   static const Color _red = Color(0xFFE52E2E);
+  static const Color _darkerGold = Color(0xFF4D3A08);
   static const Color _darkGold = Color(0xFFCC9F29);
   static const Color _gold = Color(0xFFFFD859);
   static const Color _green = Color(0xFF089908);
@@ -30,6 +31,7 @@ class AppTheme {
       shadow: _transparent,
       onSecondary: _lighterGrey,
       secondaryFixed: _darkGold,
+      secondaryFixedDim: _darkerGold,
       primaryFixed: _gold,
       error: _red,
       scrim: _green,

@@ -59,6 +59,21 @@ class NavigationHelper {
     return AppRoutes.push(context, AppRoutes.addDeviceScreen);
   }
 
+  /// Navigate to Device Details Screen
+  static Future<T?> goToDeviceDetailsScreen<T extends Object?>(BuildContext context) {
+    return AppRoutes.push(context, AppRoutes.deviceDetailsScreen);
+  }
+
+  /// Navigate to Device Setting Screen
+  static Future<T?> goToDeviceSettingsScreen<T extends Object?>(BuildContext context) {
+    return AppRoutes.push(context, AppRoutes.deviceSettingsScreen);
+  }
+
+  /// Navigate to Scheduling Screen
+  static Future<T?> goToSchedulingScreen<T extends Object?>(BuildContext context) {
+    return AppRoutes.push(context, AppRoutes.schedulingScreen);
+  }
+
   /// Navigate to sign-in screen and remove all previous routes
   static Future<T?> logout<T extends Object?>(BuildContext context) {
     return AppRoutes.pushAndClearStack(context, AppRoutes.signIn);

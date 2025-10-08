@@ -66,8 +66,15 @@ class _MyDeviceScreenState extends State<MyDeviceScreen> {
               itemCount: 7,
               itemBuilder: (context, index) {
                 return Padding(
-                  padding: EdgeInsets.only(left: _responsive.width(12), right: _responsive.width(12), bottom: _responsive.height(18)),
-                  child: MyDeviceCard(index: index),
+                  padding: EdgeInsets.only(
+                    left: _responsive.width(12),
+                    right: _responsive.width(12),
+                    bottom: _responsive.height(18),
+                  ),
+                  child: GestureDetector(
+                    onTap: () => NavigationHelper.goToDeviceDetailsScreen(context),
+                    child: MyDeviceCard(index: index),
+                  ),
                 );
               },
             ),

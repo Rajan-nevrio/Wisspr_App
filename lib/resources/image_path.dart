@@ -26,6 +26,10 @@ class ImgPath{
   static String box = "assets/image/sub_profile/box.png";
   static String msg = "assets/image/sub_profile/msg.png";
 
+  /// Dashboard > Device Screen > Add Device images path.
+  static String device = "assets/image/device_pairing/device.png";
+  static String loader = "assets/loader/loader_add_device.gif";
+
   /// Common images path.
   static String current = "assets/image/common_images/current.png";
   static String drop = "assets/image/common_images/drop.png";

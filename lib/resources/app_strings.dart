@@ -93,6 +93,25 @@ class AppStrings {
   static String subscriptionHistory = "Subscription History";
   static String cancelSubscription = "Cancel Subscription";
 
+  /// Add Device Screen strings.
+  static String addDevice = "Add Device";
+  static String searchingForDevicesViaBluetoothPleaseBePatient = "Searching for devices via Bluetooth. Please be patient...";
+  static String pairedDevice = "Paired Devices";
+  static String availableDevice = "Available Devices";
+
+  /// Device Details Screen strings.
+  static String yourAura = "Your Aura";
+
+  /// Device Setting Screen strings.
+  static String auraSetup = "Aura Setup";
+  static String currentSchedules = "Current Schedules";
+  static String noSchedulesYet = "No Schedules yet...";
+  static String createASeamlessFragranceSchedule = "Create a seamless fragrance schedule.";
+  static String createSchedule = "Create schedule";
+
+  /// Device Setting Screen strings.
+  static String scheduling = "Scheduling";
+
   /// Common Strings
   static String cancel = "Cancel";
 }
