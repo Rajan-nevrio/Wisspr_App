@@ -108,9 +108,16 @@ class AppStrings {
   static String noSchedulesYet = "No Schedules yet...";
   static String createASeamlessFragranceSchedule = "Create a seamless fragrance schedule.";
   static String createSchedule = "Create schedule";
+  static String deviceName = "Device Name";
+  static String scentName = "Scent Name";
+  static String removeDevice = "Remove Device";
 
   /// Device Setting Screen strings.
   static String scheduling = "Scheduling";
+  static String scheduleName = "Schedule Name";
+  static String enterScheduleName = "Enter Schedule Name";
+  static String setDays = "Set Days";
+  static String setTime = "Set Time";
 
   /// Common Strings
   static String cancel = "Cancel";
