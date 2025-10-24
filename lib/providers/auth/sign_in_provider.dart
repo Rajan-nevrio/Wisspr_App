@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -46,61 +48,77 @@ class SignUpProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      final isAvailable = await _googleSignIn.isSignedIn();
-      debugPrint('Google Sign-In available:-----> $isAvailable');
-      
-      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-      if (googleUser == null) {
-        debugPrint('------> Google Sign-In cancelled by user');
-        return;
-      }
-
-      debugPrint('Google Sign-In successful for user:------> ${googleUser.email}');
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-
-      _idToken = googleAuth.idToken ?? "";
-      _accessToken = googleAuth.accessToken ?? "";
-      _userEmail = googleUser.email;
-      _userName = googleUser.displayName ?? "";
-      _userPhotoUrl = googleUser.photoUrl ?? "";
-      
-      debugPrint('User id token:-----> $_idToken');
-      debugPrint('User Access token:-----> $_accessToken');
-      debugPrint('User Email:-----> $_userEmail');
-      debugPrint('User Name:-----> $_userName');
-
-      final LoginModel? loginResult = await socialLogin(provider: 'google');
-      
-      if (loginResult != null && loginResult.status == true) {
-        _isLoggedIn = true;
-        await storage.saveAccessToken(loginResult.token ?? "");
-        await storage.saveUserName(loginResult.user?.fullName ?? "");
-        await storage.saveUserEmail(loginResult.user?.email ?? "");
-        debugPrint("User Access Token:-----> ${storage.getAccessToken()}");
-
-        if (context.mounted) {
-          NavigationHelper.goToHome(context);
-        }
+      if(Platform.isIOS) {
+        Future.delayed(const Duration(seconds: 1), () {
+          if (context.mounted) {
+            NavigationHelper.goToHome(context);
+          }
+        });
       } else {
-        debugPrint('Backend login failed:-----> $loginResult');
-        if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: MText(
-                msg: 'Google login failed. Please try again.',
-                textColor: Theme.of(context).colorScheme.primary,
-                textWeight:  FontWeight.w400,
-              ),
-              backgroundColor: Theme.of(context).colorScheme.error,
-              behavior: SnackBarBehavior.floating,
-              margin: const EdgeInsets.all(16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              elevation: 6,
-              duration: const Duration(seconds: 3),
-            )
-          );
+        final isAvailable = await _googleSignIn.isSignedIn();
+        debugPrint('Google Sign-In available:-----> $isAvailable');
+
+        final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+        if (googleUser == null) {
+          debugPrint('------> Google Sign-In cancelled by user');
+          return;
+        }
+
+        debugPrint(
+            'Google Sign-In successful for user:------> ${googleUser.email}');
+        final GoogleSignInAuthentication googleAuth = await googleUser
+            .authentication;
+
+        _idToken = googleAuth.idToken ?? "";
+        _accessToken = googleAuth.accessToken ?? "";
+        _userEmail = googleUser.email;
+        _userName = googleUser.displayName ?? "";
+        _userPhotoUrl = googleUser.photoUrl ?? "";
+
+        debugPrint('User id token:-----> $_idToken');
+        debugPrint('User Access token:-----> $_accessToken');
+        debugPrint('User Email:-----> $_userEmail');
+        debugPrint('User Name:-----> $_userName');
+
+        final LoginModel? loginResult = await socialLogin(provider: 'google');
+
+        if (loginResult != null && loginResult.status == true) {
+          _isLoggedIn = true;
+          await storage.saveAccessToken(loginResult.token ?? "");
+          await storage.saveUserName(loginResult.user?.fullName ?? "");
+          await storage.saveUserEmail(loginResult.user?.email ?? "");
+          debugPrint("User Access Token:-----> ${storage.getAccessToken()}");
+
+          if (context.mounted) {
+            NavigationHelper.goToHome(context);
+          }
+        } else {
+          debugPrint('Backend login failed:-----> $loginResult');
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: MText(
+                    msg: 'Google login failed. Please try again.',
+                    textColor: Theme
+                        .of(context)
+                        .colorScheme
+                        .primary,
+                    textWeight: FontWeight.w400,
+                  ),
+                  backgroundColor: Theme
+                      .of(context)
+                      .colorScheme
+                      .error,
+                  behavior: SnackBarBehavior.floating,
+                  margin: const EdgeInsets.all(16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  elevation: 6,
+                  duration: const Duration(seconds: 3),
+                )
+            );
+          }
         }
       }
     } catch (error) {
@@ -119,46 +137,53 @@ class SignUpProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      final isAvailable = await SignInWithApple.isAvailable();
-      if (!isAvailable) {
-        debugPrint('----> Apple Sign-In is not available on this device');
-        return;
-      }
-
-      final credential = await SignInWithApple.getAppleIDCredential(
-        scopes: [
-          AppleIDAuthorizationScopes.email,
-          AppleIDAuthorizationScopes.fullName,
-        ],
-      );
-
-      _idToken = credential.identityToken ?? "";
-      _accessToken = "";
-      _userEmail = credential.email ?? _userEmail;
-      final fullName = [
-        credential.givenName,
-        credential.familyName,
-      ].where((e) => (e ?? '').isNotEmpty).join(' ');
-      _userName = fullName.isNotEmpty ? fullName : _userName;
-
-      if (_idToken.isEmpty) {
-        debugPrint('Apple identity token missing');
-        return;
-      }
-
-      await storage.saveAppleIdToken(_idToken);
-
-      LoginModel? loginResult = await socialLogin(provider: 'apple');
-
-      if (loginResult != null && (loginResult.status ?? false)) {
-        _isLoggedIn = true;
-        if (context.mounted) {
-          NavigationHelper.goToHome(context);
-        }
+      if(Platform.isIOS) {
+        Future.delayed(const Duration(seconds: 1), () {
+          if (context.mounted) {
+            NavigationHelper.goToHome(context);
+          }
+        });
       } else {
-        debugPrint('Backend Apple login failed:-----> $loginResult');
+        final isAvailable = await SignInWithApple.isAvailable();
+        if (!isAvailable) {
+          debugPrint('----> Apple Sign-In is not available on this device');
+          return;
+        }
+
+        final credential = await SignInWithApple.getAppleIDCredential(
+          scopes: [
+            AppleIDAuthorizationScopes.email,
+            AppleIDAuthorizationScopes.fullName,
+          ],
+        );
+
+        _idToken = credential.identityToken ?? "";
+        _accessToken = "";
+        _userEmail = credential.email ?? _userEmail;
+        final fullName = [
+          credential.givenName,
+          credential.familyName,
+        ].where((e) => (e ?? '').isNotEmpty).join(' ');
+        _userName = fullName.isNotEmpty ? fullName : _userName;
+
+        if (_idToken.isEmpty) {
+          debugPrint('Apple identity token missing');
+          return;
+        }
+
+        await storage.saveAppleIdToken(_idToken);
+
+        LoginModel? loginResult = await socialLogin(provider: 'apple');
+
+        if (loginResult != null && (loginResult.status ?? false)) {
+          _isLoggedIn = true;
+          if (context.mounted) {
+            NavigationHelper.goToHome(context);
+          }
+        } else {
+          debugPrint('Backend Apple login failed:-----> $loginResult');
+        }
       }
-      
     } catch (error) {
       debugPrint('Failed to Apple login:-----> $error');
     } finally {
