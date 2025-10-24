@@ -121,7 +121,7 @@ class SignUpProvider with ChangeNotifier {
     try {
       final isAvailable = await SignInWithApple.isAvailable();
       if (!isAvailable) {
-        debugPrint('Apple Sign-In is not available on this device');
+        debugPrint('----> Apple Sign-In is not available on this device');
         return;
       }
 
